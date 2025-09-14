@@ -1,0 +1,36 @@
+name: Build Newsletter
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "45 6 * * 1" # Lundi 06:45 UTC (08:45 Paris), après le scrape
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Générer la newsletter (HTML statique)
+        run: node scripts/build-newsletter.mjs
+
+      - name: Commit & push vers docs/ (Pages)
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/index.html
+          if git diff --cached --quiet; then
+            echo "Aucun changement"
+          else
+            git commit -m "chore(newsletter): build auto docs/index.html"
+            git push
+          fi
