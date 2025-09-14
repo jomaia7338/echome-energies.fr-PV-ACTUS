@@ -1,0 +1,4 @@
+[
+  {"puissance":"≤ 3 kWc","tarif":0.10,"exemple":"Maison 3 kWc"},
+  {"puissance":"≤ 9 kWc","tarif":0.09,"exemple":"Maison 6 kWc"}
+]
