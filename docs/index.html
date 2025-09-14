@@ -10,15 +10,6 @@
 
   <!-- Favicon -->
   <link rel="icon" href="Echom-Energie_logo fond noir.jpg" type="image/jpeg">
-  <link rel="apple-touch-icon" href="Echom-Energie_logo fond noir.jpg">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Newsletter — Echome Energies">
-  <meta property="og:description" content="Tarifs & primes CRE, tendances marché, innovations qui comptent.">
-  <meta property="og:image" content="https://jomaia7338.github.io/echome-energies.fr-PV-ACTUS/docs/Echom-Energie_logo%20fond%20noir.jpg">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://jomaia7338.github.io/echome-energies.fr-PV-ACTUS/docs/index.html">
-  <meta name="twitter:card" content="summary_large_image">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -36,21 +27,33 @@
     a:hover{text-decoration:none}
     .wrap{max-width:1140px;margin:auto;padding:0 18px 44px}
 
-    /* HERO */
-    .hero{background:linear-gradient(140deg,#0f1113 0%,#172024 60%,#1b2b2a 100%); color:#fff}
-    .hero .inner{max-width:1140px;margin:0 auto;padding:28px 18px 32px;display:grid;gap:10px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand-logo{width:160px;height:auto;display:block;border-radius:8px}
-    h1{margin:6px 0 0;font:800 clamp(26px,3vw,38px)/1.15 Montserrat,Inter}
-    .hero .lede{margin:6px 0 0;color:#cfe9e4}
-    .hero .meta{margin:2px 0 0;color:#a6b7bd;font-size:13.5px}
+    /* HERO – clair premium */
+    .hero{
+      background:
+        radial-gradient(900px 420px at 10% 10%, rgba(55,195,175,0.18), rgba(55,195,175,0) 60%),
+        linear-gradient(180deg, #f9fdfc 0%, #f4fbf9 100%);
+      color:var(--ink);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero .inner{max-width:1140px;margin:0 auto;padding:28px 18px 36px;display:grid;gap:10px}
+    .brand{display:flex;align-items:center;gap:16px}
+    .brand-logo{width:160px;height:auto;display:block;border-radius:10px;box-shadow:0 6px 16px rgba(16,19,22,.06)}
+    h1{margin:6px 0 0;font:800 clamp(26px,3vw,38px)/1.15 Montserrat,Inter;color:var(--ink)}
+    .hero .lede{margin:6px 0 0;color:#306a62}
+    .hero .meta{margin:2px 0 0;color:#6b7a86;font-size:13.5px}
     .hero .tags{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-    .tag{display:inline-block;padding:5px 10px;border:1px solid #2b3b3c;border-radius:999px;background:#121b1a;color:#cfe9e4;font-size:12.5px}
+    .tag{padding:6px 10px;border:1px solid #d7ece8;background:#eef8f6;color:#0d3e38;
+      border-radius:999px;font-size:12.5px;font-weight:600}
+    .hero::after{
+      content:"";position:absolute;left:0;right:0;bottom:-1px;height:36px;
+      background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="36" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,12 C300,48 900,-24 1200,12 L1200,36 L0,36 Z" fill="%23ffffff"/></svg>') center/cover no-repeat;
+    }
 
     /* TOC */
     nav.toc{border-bottom:1px solid var(--line);background:var(--muted)}
     nav.toc .inner{max-width:1140px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap;padding:8px 18px}
-    nav.toc a{display:inline-block;padding:7px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--brand-ink);text-decoration:none}
+    nav.toc a{padding:7px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--brand-ink);text-decoration:none}
     nav.toc a:hover{background:#eef7f5}
 
     /* SECTIONS */
@@ -69,7 +72,7 @@
     .card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
     .card header{display:flex;align-items:center;justify-content:space-between;gap:8px;
       padding:10px 12px;border-bottom:1px solid var(--line);margin:0;background:#fbfdfe}
-    .badge{display:inline-block;padding:4px 8px;border:1px solid var(--line);border-radius:999px;font-size:12px;background:#f8fafb;color:#2a3c41}
+    .badge{padding:4px 8px;border:1px solid var(--line);border-radius:999px;font-size:12px;background:#f8fafb;color:#2a3c41}
     .table-wrap{padding:10px;overflow:auto}
     table{width:100%;border-collapse:collapse;font-size:14px}
     th,td{border:1px solid #e5eaee;padding:8px;text-align:left}
@@ -90,7 +93,7 @@
     /* FOOTER */
     footer.site{margin-top:26px;padding:16px 0 28px;color:#6b7a86;font-size:13px}
     .cta{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
-    .btn{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
+    .btn{padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
     .btn.primary{background:var(--brand);color:#08302c}
     .btn.ghost{border:1px solid var(--line);background:#fff;color:#0d3e38}
   </style>
@@ -104,7 +107,7 @@
       <img class="brand-logo" src="Echom-Energie_logo fond noir.jpg" alt="Echome Energies — logo">
       <div>
         <h1>Newsletter — Echome Energies</h1>
-        <p class="lede">L’essentiel du solaire : tarifs & primes CRE, tendances marché, innovations qui comptent. Lecture 3 minutes.</p>
+        <p class="lede">Produire, consommer, recharger — en toute confiance.</p>
         <p class="meta">Édition <time id="edition-date"></time> · Sources : CRE · Photovoltaïque.info · Veille sectorielle</p>
       </div>
     </div>
@@ -117,95 +120,50 @@
 </section>
 
 <!-- TOC -->
-<nav class="toc" aria-label="Sommaire">
-  <div class="inner">
-    <a href="#essentiel">L’essentiel</a>
-    <a href="#tarifs-prime">Tarifs & Prime</a>
-    <a href="#actus">Actus PV</a>
-    <a href="#innovation">Innovation</a>
-    <a href="#cas-client">Cas client</a>
-    <a href="#conseil">Conseil</a>
-    <a href="#sources">Sources</a>
-    <a href="#contact">Contact</a>
-  </div>
-</nav>
+<nav class="toc"><div class="inner">
+  <a href="#essentiel">L’essentiel</a>
+  <a href="#tarifs-prime">Tarifs & Prime</a>
+  <a href="#actus">Actus PV</a>
+  <a href="#innovation">Innovation</a>
+  <a href="#cas-client">Cas client</a>
+  <a href="#conseil">Conseil</a>
+  <a href="#sources">Sources</a>
+  <a href="#contact">Contact</a>
+</div></nav>
 
 <div class="wrap">
 
-  <!-- ESSENTIEL -->
-  <section id="essentiel">
-    <h2>L’essentiel</h2>
-    <ul class="sub" id="topline-bullets">
-      <li>Tarif OA ≤ 9 kWc : stable ce trimestre.</li>
-      <li>Prix modules : tendance baissière en Europe.</li>
-      <li>Stockage : hausse des cas d’usage résidentiel.</li>
-    </ul>
-  </section>
+  <section id="essentiel"><h2>L’essentiel</h2><ul class="sub" id="topline-bullets"></ul></section>
 
-  <!-- TARIFS & PRIME -->
-  <section id="tarifs-prime">
-    <h2>Tarifs d’achat (EDF OA) et prime à l’autoconsommation — mise à jour CRE</h2>
+  <section id="tarifs-prime"><h2>Tarifs d’achat (EDF OA) et prime à l’autoconsommation — mise à jour CRE</h2>
     <div class="cols">
-      <article class="card">
-        <header><h3>Tarifs d’achat (EDF OA)</h3><span class="badge">MàJ : <time id="maj-tarifs"></time></span></header>
-        <div class="table-wrap"><table><thead><tr><th>Puissance</th><th>Tarif (€/kWh)</th><th>Exemple</th></tr></thead><tbody id="tarifs-body"></tbody></table></div>
-      </article>
-      <article class="card">
-        <header><h3>Prime à l’autoconsommation (≤ 100 kWc)</h3><span class="badge">MàJ : <time id="maj-prime"></time></span></header>
-        <div class="table-wrap"><table><thead><tr><th>Puissance</th><th>Prime (€/kWc)</th></tr></thead><tbody id="primes-body"></tbody></table></div>
-      </article>
+      <article class="card"><header><h3>Tarifs OA</h3><span class="badge">MàJ <time id="maj-tarifs"></time></span></header><div class="table-wrap"><table><thead><tr><th>Puissance</th><th>Tarif</th><th>Exemple</th></tr></thead><tbody id="tarifs-body"></tbody></table></div></article>
+      <article class="card"><header><h3>Prime autoconsommation</h3><span class="badge">MàJ <time id="maj-prime"></time></span></header><div class="table-wrap"><table><thead><tr><th>Puissance</th><th>Prime</th></tr></thead><tbody id="primes-body"></tbody></table></div></article>
     </div>
-    <div class="note" id="delta-cre"><strong>Ce que ça change :</strong> pas de mouvement majeur pour le résidentiel ≤ 9 kWc.</div>
-    <div class="kpi"><span class="pill">Autoconsommation typique : ~60 %</span><span class="pill">Surplus valorisé au tarif OA</span></div>
+    <div class="note" id="delta-cre"><strong>Ce que ça change :</strong></div>
   </section>
 
-  <!-- ACTUS -->
-  <section id="actus">
-    <h2>Actualités photovoltaïque</h2>
-    <div class="grid-3 news" id="news-cards"></div>
-  </section>
+  <section id="actus"><h2>Actualités photovoltaïque</h2><div class="grid-3 news" id="news-cards"></div></section>
 
-  <!-- INNOVATION -->
-  <section id="innovation">
-    <h2>Innovation & solutions — MySmartBattery</h2>
-    <div class="cols">
-      <div class="note"><h3>Le principe</h3><p>MySmartBattery est un pilotage intelligent (virtuel/physique) qui maximise l’autoconsommation en décalant les usages vers les heures PV.</p></div>
-      <div class="note"><h3>Applications</h3><ul class="sub"><li>Résidentiel : eau chaude & recharge véhicule</li><li>PME : pilotage froid, ventilation</li><li>Supervision : suivi conso/production</li></ul></div>
-    </div>
-  </section>
+  <section id="innovation"><h2>Innovation — Solutions MyLight150</h2><div class="cols">
+    <div class="note"><h3>MySmartBattery</h3><p>Batterie virtuelle : jusqu’à 100 % d’autoconsommation, -80 % facture élec. Pilotage météo (Greenplay).</p></div>
+    <div class="note"><h3>MySmartHeatPump</h3><p>-30 % dépenses énergétiques PAC, pilotage connecté, confort inchangé.</p></div>
+    <div class="note"><h3>MySmartCharger</h3><p>Borne solaire connectée (3 modes : solaire, rapide, HC). -40 % coûts vs. bornes concurrentes.</p></div>
+  </div></section>
 
-  <!-- CAS CLIENT -->
-  <section id="cas-client">
-    <h2>Cas client — Maison individuelle 6 kWc</h2>
-    <ul class="sub"><li>Production : ~7 000 kWh/an</li><li>Autoconsommation : ~60 %</li><li>Économie annuelle : ~500–700 €</li><li>Surplus valorisé via EDF OA</li></ul>
-  </section>
+  <section id="cas-client"><h2>Cas client — Maison 6 kWc + MySmartBattery</h2><ul class="sub"><li>Production : 6 600 kWh/an</li><li>Autoconsommation : ~100 % grâce batterie</li><li>Économie annuelle : 2 176 €</li></ul></section>
 
-  <!-- CONSEIL -->
-  <section id="conseil">
-    <h2>Conseil — Autoconsommation collective</h2>
-    <div class="cols">
-      <div class="note"><h3>Rappel</h3><p>Périmètre ≤ 2 km, un PMO gère la répartition entre participants.</p></div>
-      <div class="note"><h3>Intérêts</h3><ul class="sub"><li>Valorisation locale</li><li>Partage équitable</li><li>Dynamique citoyenne</li></ul></div>
-    </div>
-  </section>
+  <section id="conseil"><h2>Conseil — Autoconsommation collective</h2><div class="cols">
+    <div class="note"><h3>Rappel</h3><p>Article L315-2 du code de l’énergie : production partagée via une PMO, périmètre ≤ 2 km.</p></div>
+    <div class="note"><h3>Avantages</h3><ul class="sub"><li>Valorisation locale</li><li>Partage équitable</li><li>Dynamique citoyenne</li></ul></div>
+  </div></section>
 
-  <!-- SOURCES -->
-  <section id="sources">
-    <h2>Sources officielles</h2>
-    <ul class="sub"><li>CRE — arrêtés tarifaires</li><li>Photovoltaïque.info (INES/CEA)</li></ul>
-  </section>
+  <section id="sources"><h2>Sources officielles</h2><ul class="sub"><li>CRE — arrêtés & appels d’offres</li><li><a href="https://www.photovoltaique.info/fr/tarifs-dachat-et-autoconsommation/">Photovoltaïque.info (INES/CEA)</a></li></ul></section>
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <h2>Contact</h2>
-    <p class="sub">Echome Energies — 1159 rue de la Galandrine, 38210 Saint-Quentin-sur-Isère</p>
-    <p class="sub">Tél. <a href="tel:+33476373462">04 76 37 34 62</a> — <a href="mailto:contact@echome-energies.fr">contact@echome-energies.fr</a></p>
-  </section>
+  <section id="contact"><h2>Contact</h2><p class="sub">Echome Energies — Saint-Quentin-sur-Isère</p><p class="sub">☎ <a href="tel:+33476373462">04 76 37 34 62</a> · ✉ <a href="mailto:contact@echome-energies.fr">contact@echome-energies.fr</a></p></section>
 
-  <footer class="site">
-    <div class="cta"><a class="btn primary" href="#contact">Parlons de votre projet</a><a class="btn ghost" href="#tarifs-prime">Voir tarifs & primes</a></div>
-    <p>© <span id="year"></span> Echome Energies — Tous droits réservés.</p>
-  </footer>
+  <footer class="site"><div class="cta"><a class="btn primary" href="#contact">Parlons de votre projet</a><a class="btn ghost" href="#tarifs-prime">Voir tarifs & primes</a></div><p>© <span id="year"></span> Echome Energies</p></footer>
+
 </div>
 
 <script>
@@ -222,6 +180,7 @@
     const feeds=await safeLoad('../reports/feeds.json')||await safeLoad('reports/feeds.json');
     if(!feeds||!feeds.items)return;
     const items=feeds.items.slice(0,3);
+    document.getElementById('topline-bullets').innerHTML=items.map(it=>`<li>${it.title}</li>`).join('');
     document.getElementById('news-cards').innerHTML=items.map(it=>`
       <article class="card"><div class="content">
       <p class="source"><span class="badge">Actu</span> ${it.source_name||''}</p>
