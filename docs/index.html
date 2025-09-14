@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Newsletter — Echome Énergies</title>
+  <meta name="description" content="Synthèse CRE (tarifs d’achat & prime), actualités PV, innovation MySmartBattery, cas client 6 kWc, conseils ACC/PMO.">
+  <style>
+    :root{--ink:#121417;--sub:#596775;--line:#e5ecf0;--bg:#ffffff;--muted:#f8fafb;--brand:#2aa08f;--brand-ink:#0e3b36}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.65 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+    a{color:var(--brand-ink);text-decoration:underline} a:hover{text-decoration:none}
+    .wrap{max-width:1060px;margin:auto;padding:28px 18px 44px}
+    header.site{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+    .logo{width:44px;height:44px;border-radius:10px;background:#111;color:#fff;display:grid;place-items:center;font-weight:700}
+    .logo::after{content:"E";font-size:19px}
+    h1{margin:0;font:700 clamp(22px,2.6vw,30px)/1.25 Inter,system-ui,Segoe UI,Roboto,Arial}
+    .lede{color:var(--sub);margin:6px 0 2px}
+    .meta{font-size:13px;color:#596775;margin-top:4px}
+    nav.toc{margin-top:14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--muted)}
+    nav.toc .inner{display:flex;gap:10px;flex-wrap:wrap;padding:8px 10px}
+    nav.toc a{display:inline-block;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;text-decoration:none;color:var(--brand-ink)}
+    section{padding:22px 0;border-bottom:1px solid var(--line)} section:last-of-type{border-bottom:none}
+    h2{margin:0 0 10px;font:700 18px/1.3 Inter} h3{margin:0 0 8px;font:600 16px/1.35 Inter}
+    .sub{color:var(--sub);margin:0 0 12px}
+    .cols{display:grid;gap:18px} @media(min-width:860px){.cols{grid-template-columns:1fr 1fr}}
+    .card{background:#fff;border:1px solid var(--line);border-radius:10px}
+    .card header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);margin:0}
+    .badge{display:inline-block;padding:4px 8px;border:1px solid var(--line);border-radius:999px;font-size:12px;background:#f8fafb}
+    .table-wrap{padding:10px;overflow-x:auto}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th,td{border:1px solid #e5eaee;padding:8px;text-align:left} th{background:#f5f7f8}
+    .grid-2{display:grid;gap:18px} @media(min-width:860px){.grid-2{grid-template-columns:1fr 1fr}}
+    ul.clean{margin:0;padding-left:18px} ul.clean li{margin:4px 0}
+    .note{border-left:4px solid var(--brand);background:#fff;border:1px solid var(--line);padding:12px;border-radius:8px}
+    .newslist{display:grid;gap:12px} .newslist article{border-left:4px solid var(--brand);background:#fff;border:1px solid var(--line);padding:12px;border-radius:8px}
+    footer.site{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:#596775}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header class="site">
+    <div class="logo" aria-hidden="true"></div>
+    <div>
+      <h1>Newsletter — Echome Énergies</h1>
+      <p class="lede">Synthèse CRE : tarifs d’achat (EDF OA) & prime à l’autoconsommation · Innovations · Cas client · Conseils.</p>
+      <p class="meta">Édition <time id="edition-date"></time> · Sources : CRE · Photovoltaïque.info · Veille sectorielle</p>
+    </div>
+  </header>
+
+  <!-- Sommaire -->
+  <nav class="toc" aria-label="Sommaire">
+    <div class="inner">
+      <a href="#tarifs-prime">Tarifs & Prime</a>
+      <a href="#innovation">Innovation</a>
+      <a href="#cas-client">Cas client</a>
+      <a href="#conseil">Conseil</a>
+      <a href="#sources">Sources</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Tarifs & Prime -->
+  <section id="tarifs-prime">
+    <h2>Tarifs d’achat (EDF OA) et prime à l’autoconsommation — mise à jour CRE</h2>
+    <div class="cols">
+
+      <article class="card" aria-labelledby="h-tarifs">
+        <header>
+          <h3 id="h-tarifs">Tarifs d’achat (EDF OA)</h3>
+          <span class="badge">MàJ : <time id="maj-tarifs"></time></span>
+        </header>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Puissance</th><th>Tarif (€/kWh)</th><th>Exemple</th></tr></thead>
+            <tbody id="tarifs-body">
+              <!-- Fallback (si JSON absent) -->
+              <tr><td>≤ 3 kWc</td><td>0,1000</td><td>Maison 3 kWc</td></tr>
+              <tr><td>≤ 9 kWc</td><td>0,0900</td><td>Maison 6 kWc</td></tr>
+              <tr><td>9–36 kWc</td><td>0,0600</td><td>Petite PME 30 kWc</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="card" aria-labelledby="h-prime">
+        <header>
+          <h3 id="h-prime">Prime à l’autoconsommation (≤ 100 kWc)</h3>
+          <span class="badge">MàJ : <time id="maj-prime"></time></span>
+        </header>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Puissance</th><th>Prime (€/kWc)</th></tr></thead>
+            <tbody id="primes-body">
+              <!-- Fallback (si JSON absent) -->
+              <tr><td>≤ 3 kWc</td><td>330</td></tr>
+              <tr><td>3–9 kWc</td><td>250</td></tr>
+              <tr><td>9–36 kWc</td><td>200</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+    </div>
+    <p class="sub" style="margin-top:10px">Les niveaux varient selon la tranche de puissance et la période CRE.</p>
+  </section>
+
+  <!-- Innovation -->
+  <section id="innovation">
+    <h2>Innovation & solutions — MySmartBattery</h2>
+    <div class="grid-2">
+      <div class="note">
+        <h3>Point technique</h3>
+        <p>
+          MySmartBattery est une approche de <strong>stockage intelligent</strong> (virtuel et/ou physique) qui
+          maximise l’<strong>autoconsommation</strong> en décalant des usages (ECS, IRVE, PAC) vers les heures de production PV.
+          L’algorithme pilote les équipements, réduit le surplus injecté et diminue les achats réseau.
+        </p>
+      </div>
+      <div class="note">
+        <h3>Applications concrètes</h3>
+        <ul class="clean">
+          <li>Résidentiel : programmation de l’eau chaude et de la recharge véhicule en milieu de journée.</li>
+          <li>PME : pilotage des postes flexibles (froid, ventilation, process non critiques).</li>
+          <li>Supervision : suivi production/consommation, alertes, optimisation continue.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cas client -->
+  <section id="cas-client">
+    <h2>Cas client — Maison individuelle 6 kWc</h2>
+    <p class="sub">Installation en toiture, orientation Sud, onduleur 6 kVA, comptage Enedis.</p>
+    <ul class="clean">
+      <li>Production annuelle estimée : ~7 000 kWh</li>
+      <li>Taux d’autoconsommation : ~60 % (avec pilotage ECS/IRVE)</li>
+      <li>Économie annuelle estimée : ~500–700 € (selon usages)</li>
+      <li>Surplus valorisé via EDF OA — tarifs en vigueur (voir tableau)</li>
+    </ul>
+  </section>
+
+  <!-- Conseil -->
+  <section id="conseil">
+    <h2>Conseil — Autoconsommation collective (ACC)</h2>
+    <div class="grid-2">
+      <div class="note">
+        <h3>Rappel</h3>
+        <p>
+          L’ACC permet de répartir la production d’une installation entre plusieurs consommateurs d’un même périmètre
+          (<strong>≤ 2 km</strong> en général). Un <strong>PMO</strong> (organisme gestionnaire) organise la répartition et les conventions.
+        </p>
+      </div>
+      <div class="note">
+        <h3>Intérêt</h3>
+        <ul class="clean">
+          <li>Meilleure valorisation locale de l’énergie</li>
+          <li>Partage équitable entre participants (quotes-parts)</li>
+          <li>Dynamique citoyenne/territoriale et visibilité des bénéfices</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sources -->
+  <section id="sources">
+    <h2>Sources officielles</h2>
+    <ul class="clean">
+      <li>CRE — arrêtés tarifaires et périodes de référence</li>
+      <li>Photovoltaïque.info (INES/CEA) — synthèses tarifs & autoconsommation</li>
+    </ul>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <h2>Contact</h2>
+    <p class="sub">Echome Énergies — 1159 rue de la Galandrine, 38210 Saint-Quentin-sur-Isère</p>
+    <p class="sub">Tél. <a href="tel:+33476373462">04 76 37 34 62</a> — <a href="mailto:contact@echome-energies.fr">contact@echome-energies.fr</a></p>
+  </section>
+
+  <footer class="site">© <span id="year"></span> Echome Énergies — Tous droits réservés.</footer>
+</div>
+
+<script>
+  // Dates
+  const now = new Date();
+  const fr = now.toLocaleDateString('fr-FR');
+  document.getElementById('edition-date').textContent = fr;
+  document.getElementById('maj-tarifs').textContent = fr;
+  document.getElementById('maj-prime').textContent = fr;
+  document.getElementById('year').textContent = now.getFullYear();
+
+  // Essaye de charger /data/tarifs.json et /data/primes.json ; sinon, garde le fallback
+  async function safeLoad(url){
+    try{
+      const r = await fetch(url, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return await r.json();
+    }catch(e){ return null; }
+  }
+
+  (async () => {
+    const tarifs = await safeLoad('data/tarifs.json');
+    const primes = await safeLoad('data/primes.json');
+
+    if (Array.isArray(tarifs) && tarifs.length){
+      const rows = tarifs.map(t =>
+        `<tr><td>${t.puissance||''}</td><td>${(t.tarif??'').toString().replace('.',',')}</td><td>${t.exemple||'—'}</td></tr>`
+      ).join('');
+      document.getElementById('tarifs-body').innerHTML = rows;
+    }
+    if (Array.isArray(primes) && primes.length){
+      const rows = primes.map(p =>
+        `<tr><td>${p.puissance||''}</td><td>${(p.prime??'').toString().replace('.',',')}</td></tr>`
+      ).join('');
+      document.getElementById('primes-body').innerHTML = rows;
+    }
+  })();
+</script>
+</body>
+</html>
