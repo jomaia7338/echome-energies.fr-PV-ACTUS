@@ -1,1 +1,6 @@
-a
+
+{ "scraped_at":"…", "count":12,
+  "items":[
+    {"source_id":"pv-mag-fr","source_name":"PV Magazine France","source_url":"…","mode":"rss","title":"…","url":"…","date":"2025-09-12T09:00:00Z","scraped_at":"…"}
+  ]
+}
