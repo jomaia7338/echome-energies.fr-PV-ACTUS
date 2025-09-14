@@ -53,7 +53,7 @@
     /* TOC */
     nav.toc{border-bottom:1px solid var(--line);background:var(--muted)}
     nav.toc .inner{max-width:1140px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap;padding:8px 18px}
-    nav.toc a{padding:7px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--brand-ink);text-decoration:none}
+    nav.toc a{padding:7px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#0d3e38;text-decoration:none}
     nav.toc a:hover{background:#eef7f5}
 
     /* SECTIONS */
@@ -126,7 +126,7 @@
 
 <!-- TOC -->
 <nav class="toc"><div class="inner">
-  <a href="#essentiel">L’essentiel</a>
+  <a href="#presentation">Présentation</a>
   <a href="#tarifs-prime">Tarifs & Prime</a>
   <a href="#editor-shortlist">Pré-sélection</a>
   <a href="#actus">Actus PV</a>
@@ -138,6 +138,15 @@
 </div></nav>
 
 <div class="wrap">
+
+  <!-- PRÉSENTATION -->
+  <section id="presentation">
+    <h2>Présentation — Echome Energies</h2>
+    <div class="note">
+      <p><strong>Echome Energies</strong> est une entreprise indépendante spécialisée dans le photovoltaïque (résidentiel, PME, collectivités) en Isère et région AURA. Notre promesse&nbsp;: <em>un accompagnement clé en main, des solutions fiables et un pilotage intelligent</em> (autoconsommation, stockage virtuel, gestion des usages).</p>
+      <p>De l’étude à la mise en service, nous visons un résultat concret&nbsp;: <strong>baisser durablement votre facture et sécuriser votre production</strong>, avec un suivi transparent et des conseils utiles à chaque étape.</p>
+    </div>
+  </section>
 
   <!-- ESSENTIEL -->
   <section id="essentiel">
@@ -208,13 +217,26 @@
     <div class="grid-3 news" id="news-cards"></div>
   </section>
 
-  <!-- INNOVATION -->
+  <!-- INNOVATION / ACC -->
   <section id="innovation">
-    <h2>Innovation — Solutions MyLight150</h2>
+    <h2>Innovation & solutions — Autoconsommation collective (ACC)</h2>
     <div class="cols">
-      <div class="note"><h3>MySmartBattery</h3><p>Batterie virtuelle : jusqu’à 100 % d’autoconsommation, -80 % facture élec. Pilotage météo (Greenplay).</p></div>
-      <div class="note"><h3>MySmartHeatPump</h3><p>-30 % dépenses énergétiques PAC, pilotage connecté, confort inchangé.</p></div>
-      <div class="note"><h3>MySmartCharger</h3><p>Borne solaire connectée (3 modes : solaire, rapide, HC). -40 % coûts vs. bornes concurrentes.</p></div>
+      <div class="note">
+        <h3>Le principe</h3>
+        <p>L’ACC répartit la production d’une installation entre plusieurs consommateurs d’un même périmètre (<strong>généralement ≤ 2 km</strong>). Un <strong>PMO</strong> organise la répartition, la gestion des conventions et le lien avec le GRD.</p>
+      </div>
+      <div class="note">
+        <h3>Applications concrètes</h3>
+        <ul class="sub" style="margin:0">
+          <li>Résidentiel : partage de la production d’un immeuble / quartier</li>
+          <li>PME/collectivités : valorisation locale sur sites proches</li>
+          <li>Supervision : suivi conso/production, alertes, optimisation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note" style="margin-top:12px">
+      <h3>Alternative/Complément — MySmartBattery</h3>
+      <p>Un pilotage intelligent (virtuel/physique) maximise l’autoconsommation en décalant les usages (ECS, IRVE, PAC) vers les heures PV. Résultat&nbsp;: moins d’achats réseau, meilleure valorisation du surplus.</p>
     </div>
   </section>
 
@@ -222,18 +244,19 @@
   <section id="cas-client">
     <h2>Cas client — Maison 6 kWc + MySmartBattery</h2>
     <ul class="sub">
-      <li>Production : 6 600 kWh/an</li>
-      <li>Autoconsommation : ~100 % grâce batterie</li>
-      <li>Économie annuelle : 2 176 €</li>
+      <li>Production annuelle estimée : ~6 600 kWh</li>
+      <li>Autoconsommation : jusqu’à ~100 % grâce à la batterie virtuelle</li>
+      <li>Économie annuelle estimée : ~2 176 € (selon usages)</li>
+      <li>Confort : pilotage ECS & recharge véhicule</li>
     </ul>
   </section>
 
   <!-- CONSEIL -->
   <section id="conseil">
-    <h2>Conseil — Autoconsommation collective</h2>
+    <h2>Conseil — Bien dimensionner l’autoconsommation</h2>
     <div class="cols">
-      <div class="note"><h3>Rappel</h3><p>Article L315-2 du code de l’énergie : production partagée via une PMO, périmètre ≤ 2 km.</p></div>
-      <div class="note"><h3>Avantages</h3><ul class="sub"><li>Valorisation locale</li><li>Partage équitable</li><li>Dynamique citoyenne</li></ul></div>
+      <div class="note"><h3>Rappel</h3><p>Prioriser les usages en journée (ECS/IRVE/PAC), lisser les pointes et surveiller le <em>taux d’autoconsommation</em> vs. <em>autosuffisance</em>. Une ACC ou une batterie virtuelle peut compléter le schéma.</p></div>
+      <div class="note"><h3>À retenir</h3><ul class="sub"><li>Puissance adaptée aux profils de charge</li><li>Optimisation par pilotage connecté</li><li>Vérifier les aides locales & guichets ouverts</li></ul></div>
     </div>
   </section>
 
@@ -241,7 +264,7 @@
   <section id="sources">
     <h2>Sources officielles</h2>
     <ul class="sub">
-      <li>CRE — arrêtés & appels d’offres</li>
+      <li>CRE — arrêtés & appels d’offres (tarifs & primes)</li>
       <li><a href="https://www.photovoltaique.info/fr/tarifs-dachat-et-autoconsommation/" target="_blank" rel="noopener">Photovoltaïque.info (INES/CEA)</a></li>
     </ul>
   </section>
@@ -303,12 +326,19 @@
       document.getElementById('topline-bullets').innerHTML=items.map(it=>`<li>${(it.title||'').replace(/</g,'&lt;')}</li>`).join('');
     }
     // Cartes “Actus”
-    document.getElementById('news-cards').innerHTML=items.map(it=>`
-      <article class="card"><div class="content">
-      <p class="source"><span class="badge">Actu</span> ${it.source_name||''}</p>
-      <h3 class="title"><a href="${it.url}" target="_blank" rel="noopener">${(it.title||'').replace(/</g,'&lt;')}</a></h3>
-      <p class="meta-row">${it.date?new Date(it.date).toLocaleDateString('fr-FR'):'Sélection'}</p>
-      </div></article>`).join('');
+    document.getElementById('news-cards').innerHTML=items.map(it=>{
+      const d = it.date || it.scraped_at;
+      const when = d ? new Date(d).toLocaleDateString('fr-FR') : 'Sélection';
+      const title = (it.title||'').replace(/</g,'&lt;');
+      const src = it.source_name || '';
+      const url = it.url || '#';
+      return `
+        <article class="card"><div class="content">
+          <p class="source"><span class="badge">Actu</span> ${src}</p>
+          <h3 class="title"><a href="${url}" target="_blank" rel="noopener">${title}</a></h3>
+          <p class="meta-row">${when}</p>
+        </div></article>`;
+    }).join('');
   })();
 </script>
 
@@ -337,6 +367,19 @@
     return;
   }
 
+  // updated/scraped_at + volume
+  const updated =
+    feeds.updated || feeds.scraped_at ||
+    (feeds.items[0] && (feeds.items[0].scraped_at || feeds.items[0].date)) || null;
+  const shortSub = document.querySelector('#editor-shortlist .sub');
+  if (shortSub) {
+    const parts = [];
+    if (updated) parts.push(`Données du ${fmt(updated)}`);
+    if (typeof feeds.count === 'number') parts.push(`${feeds.count} actus agrégées`);
+    if (parts.length) shortSub.textContent += ` · ${parts.join(' · ')}`;
+  }
+
+  // scoring
   const scoreOne = (it) => {
     const text = deaccent([it.title, it.summary, it.source_name].filter(Boolean).join(' '));
     let label = 'Tendance', score = 0;
@@ -350,6 +393,7 @@
     return {...it, score, label, ageDays};
   };
 
+  // tri + diversité de sources
   const all = feeds.items.map(scoreOne).sort((a,b)=> b.score - a.score);
   const shortlist = [];
   const seenSrc = new Set();
@@ -361,6 +405,7 @@
     if (shortlist.length >= 5) break;
   }
 
+  // rendu cartes shortlist
   const htmlCard = (it) => `
     <article class="card">
       <header>
@@ -369,13 +414,13 @@
       </header>
       <div class="content" style="padding:12px">
         <h3 class="title" style="margin:0 0 6px"><a target="_blank" rel="noopener" href="${it.url||'#'}">${(it.title||'(sans titre)').replace(/</g,'&lt;')}</a></h3>
-        <p class="meta-row">Publié le ${fmt(it.date)} · Score ${it.score}</p>
+        <p class="meta-row">Publié le ${fmt(it.date || it.scraped_at)} · Score ${it.score}</p>
       </div>
     </article>`;
-
   const cont = document.getElementById('shortlist-cards');
   if(cont) cont.innerHTML = shortlist.map(htmlCard).join('');
 
+  // synthèse tendances (top 3 labels)
   const counts = shortlist.reduce((acc,it)=> (acc[it.label]=(acc[it.label]||0)+1, acc), {});
   const topLabels = Object.entries(counts).sort((a,b)=> b[1]-a[1]).slice(0,3).map(([k,v])=>({k,v}));
   const bulletOf = (k)=>({
@@ -389,11 +434,11 @@
   const trendsUl = document.getElementById('trend-bullets');
   if(trendsUl) trendsUl.innerHTML = topLabels.map(({k})=> `<li>${bulletOf(k)}</li>`).join('');
 
+  // propositions Zoom Actu & Tendance marché
   const pick = (labelWanted) => shortlist.find(it=>it.label===labelWanted) || shortlist[0];
   const zoom = pick('Régulation') || pick('Prix');
   const trend = pick('Prix') || pick('Tendance');
-
-  const explain = (it) => it ? `${it.label} — <a href="${it.url||'#'}" target="_blank" rel="noopener">${(it.title||'Actu sélectionnée').replace(/</g,'&lt;')}</a> · ${fmt(it.date)} · ${it.source_name||'Source'}` : '—';
+  const explain = (it) => it ? `${it.label} — <a href="${it.url||'#'}" target="_blank" rel="noopener">${(it.title||'Actu sélectionnée').replace(/</g,'&lt;')}</a> · ${fmt(it.date || it.scraped_at)} · ${it.source_name||'Source'}` : '—';
   const zoomEl = document.getElementById('zoom-expl');
   const trendEl = document.getElementById('trend-expl');
   if(zoomEl) zoomEl.innerHTML = explain(zoom);
@@ -419,11 +464,6 @@
   const deltaEl = document.getElementById('delta-cre');
   if (deltaEl) deltaEl.innerHTML = '<strong>Ce que ça change :</strong> ' + deltaMsg;
 
-  // Marqueur de build s’il existe feeds.updated
-  const shortSub = document.querySelector('#editor-shortlist .sub');
-  if (shortSub && feeds.updated){
-    shortSub.textContent += ` · Données du ${fmt(feeds.updated)}`;
-  }
 })();
 </script>
 
