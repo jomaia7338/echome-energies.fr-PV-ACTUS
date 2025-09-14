@@ -1,0 +1,4 @@
+[
+  { "puissance": "≤ 9 kWc",   "tarif": 0.0400, "exemple": "Résidentiel 3–9 kWc (surplus)" },
+  { "puissance": "9–100 kWc", "tarif": 0.0731, "exemple": "Tertiaire/PME 30–100 kWc (surplus)" }
+]
