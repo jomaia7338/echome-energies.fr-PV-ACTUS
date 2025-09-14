@@ -143,6 +143,32 @@
     <div class="note" id="delta-cre"><strong>Ce que ça change :</strong></div>
   </section>
 
+<section id="editor-shortlist">
+  <h2 style="display:flex;align-items:center;gap:8px">
+    Shortlist mensuelle (proposition)
+    <span class="badge">Step 2 — Pré-sélection</span>
+  </h2>
+  <p class="sub">Proposition automatique issue des 20 newsletters suivies. Valide 1 sujet “Zoom Actu” et 1 sujet “Tendance marché”.</p>
+
+  <div class="cols" id="shortlist-cards"></div>
+
+  <div class="note" id="synthese-tendances" style="margin-top:12px">
+    <strong>Synthèse des tendances :</strong>
+    <ul id="trend-bullets" class="sub" style="margin:8px 0 0"></ul>
+  </div>
+
+  <div class="cols" style="margin-top:12px">
+    <div class="note" id="zoom-proposal">
+      <h3>Suggestion Zoom Actu</h3>
+      <p class="sub" id="zoom-expl"></p>
+    </div>
+    <div class="note" id="trend-proposal">
+      <h3>Suggestion Tendance marché</h3>
+      <p class="sub" id="trend-expl"></p>
+    </div>
+  </div>
+</section>
+  
   <section id="actus"><h2>Actualités photovoltaïque</h2><div class="grid-3 news" id="news-cards"></div></section>
 
   <section id="innovation"><h2>Innovation — Solutions MyLight150</h2><div class="cols">
@@ -189,5 +215,103 @@
       </div></article>`).join('');
   })();
 </script>
+
+<script>
+(async () => {
+  // --- helpers ---
+  const tryJson = async (u)=>{ try{const r=await fetch(u,{cache:'no-store'}); if(!r.ok) throw 0; return await r.json();}catch{return null;} };
+  const fmt = (d)=> d ? new Date(d).toLocaleDateString('fr-FR') : '—';
+  const THEMES = [
+    {key:'Prix',           rx:/(prix|price|€/i), weight:2},
+    {key:'Régulation',     rx:/(CRE|arrêté|décret|appel d’offres|AO|régulation|tarif|prime)/i, weight:3},
+    {key:'Stockage',       rx:/(batterie|storage|V2H|V2G|Powerwall|virtuel|MySmartBattery|bms)/i, weight:2},
+    {key:'AgriPV',         rx:/(agrivolta|agri-photovolta|serre|élevage)/i, weight:2},
+    {key:'BIPV',           rx:/(BIPV|intégr(é|ee)|tuiles? solaires?|façade)/i, weight:1},
+    {key:'Tendance',       rx:/(marché|tendance|record|gigafactory|investissement|prix du silicium)/i, weight:1},
+  ];
+
+  // --- charge feeds ---
+  const feeds = await tryJson('../reports/feeds.json') || await tryJson('reports/feeds.json');
+  if(!feeds || !Array.isArray(feeds.items) || !feeds.items.length){
+    document.getElementById('shortlist-cards').innerHTML = '<p class="sub">Aucune donnée dispo (feeds.json introuvable). Le module reste en veille.</p>';
+    return;
+  }
+
+  // --- scoring ---
+  const scoreOne = (it) => {
+    const text = [it.title, it.summary, it.source_name].filter(Boolean).join(' ');
+    let label = 'Tendance', score = 0;
+    for(const th of THEMES){
+      if(th.rx.test(text)){ score += th.weight; label = th.key; }
+    }
+    const ageDays = it.date ? (Date.now()-new Date(it.date).getTime())/86400000 : 999;
+    if (ageDays < 7) score += 3; else if (ageDays < 14) score += 2; else if (ageDays < 31) score += 1;
+    // bonus si plusieurs occurrences du thème clé dans le titre
+    const title = (it.title||'');
+    if (label!=='Tendance' && (title.match(THEMES.find(t=>t.key===label)?.rx)||[]).length>1) score += 1;
+    return {...it, score, label, ageDays};
+  };
+
+  // --- tri + diversité de sources ---
+  const all = feeds.items.map(scoreOne).sort((a,b)=> b.score - a.score);
+  const shortlist = [];
+  const seenSrc = new Set();
+  for(const it of all){
+    const src = it.source_name || it.source || 'source';
+    if(seenSrc.has(src)) continue;
+    shortlist.push(it);
+    seenSrc.add(src);
+    if (shortlist.length >= 5) break;
+  }
+
+  // --- rendu cartes shortlist ---
+  const htmlCard = (it) => `
+    <article class="card">
+      <header>
+        <span class="badge">${it.label}</span>
+        <span class="sub" style="font-size:12px">${it.source_name||'Source'}</span>
+      </header>
+      <div class="content" style="padding:12px">
+        <h3 class="title" style="margin:0 0 6px"><a target="_blank" rel="noopener" href="${it.url||'#'}">${(it.title||'(sans titre)').replace(/</g,'&lt;')}</a></h3>
+        <p class="meta-row">Publié le ${fmt(it.date)} · Score ${it.score}</p>
+      </div>
+    </article>`;
+  document.getElementById('shortlist-cards').innerHTML = shortlist.map(htmlCard).join('');
+
+  // --- synthèse tendances (top 3 labels) ---
+  const counts = shortlist.reduce((acc,it)=> (acc[it.label]=(acc[it.label]||0)+1, acc), {});
+  const topLabels = Object.entries(counts).sort((a,b)=> b[1]-a[1]).slice(0,3).map(([k,v])=>({k,v}));
+  const bulletOf = (k)=>({
+    'Prix': 'Prix modules : mouvement notable (opportunité CAPEX/ROI).',
+    'Régulation': 'Réglementaire : fenêtre CRE/arrêtés à surveiller.',
+    'Stockage': 'Stockage résidentiel/PME en montée (couplage PV).',
+    'AgriPV': 'AgriPV : projets et cadre en évolution locale.',
+    'BIPV': 'BIPV : intégration architecturale en progrès.',
+    'Tendance': 'Marché PV : dynamique et volumes en hausse.'
+  }[k] || 'Signal marché pertinent.');
+  document.getElementById('trend-bullets').innerHTML = topLabels.map(({k})=> `<li>${bulletOf(k)}</li>`).join('');
+
+  // --- propositions Zoom Actu & Tendance marché ---
+  const pick = (labelWanted) => shortlist.find(it=>it.label===labelWanted) || shortlist[0];
+  const zoom = pick('Régulation') || pick('Prix');   // si possible on met la régulation en Zoom
+  const trend = pick('Prix') || pick('Tendance');    // marché/prix en “Tendance”
+
+  const explain = (it) => it ? `${it.label} — <a href="${it.url||'#'}" target="_blank" rel="noopener">${(it.title||'Actu sélectionnée').replace(/</g,'&lt;')}</a> · ${fmt(it.date)} · ${it.source_name||'Source'}` : '—';
+  document.getElementById('zoom-expl').innerHTML = explain(zoom);
+  document.getElementById('trend-expl').innerHTML = explain(trend);
+
+  // --- bonus : alimente "L’essentiel" si vide (3 bullets dérivés) ---
+  const topline = [
+    zoom?.label==='Régulation' ? 'Réglementaire : période/arrêté CRE à suivre.' : null,
+    trend?.label==='Prix' ? 'Prix modules : dynamique et écarts par techno.' : null,
+    shortlist.some(i=>i.label==='Stockage') ? 'Stockage : cas d’usage résidentiel/PME en hausse.' : null
+  ].filter(Boolean).slice(0,3);
+  if (topline.length && document.getElementById('topline-bullets') && !document.getElementById('topline-bullets').children.length){
+    document.getElementById('topline-bullets').innerHTML = topline.map(t=>`<li>${t}</li>`).join('');
+  }
+})();
+</script>
+
+  
 </body>
 </html>
