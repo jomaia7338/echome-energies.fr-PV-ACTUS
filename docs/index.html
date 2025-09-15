@@ -3,469 +3,155 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Newsletter — Echome Energies</title>
-  <meta name="description" content="Newsletter Echome Energies : l’essentiel du photovoltaïque en 3 minutes — tarifs & primes CRE, actus scorées, innovation, cas client, conseil." />
-  <meta name="color-scheme" content="light" />
-  <meta name="theme-color" content="#37C3AF" />
-
-  <!-- Favicon -->
-  <link rel="icon" href="Echom-Energie_logo fond noir.jpg" type="image/jpeg">
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-
+  <title>Newsletter — Echome Énergies (15/09/2025)</title>
+  <meta name="description" content="Synthèse CRE (tarifs d’achat & prime), actualités PV, innovation, cas client, conseil.">
   <style>
-    :root{
-      --ink:#101316; --sub:#5e6b78; --line:#e6edf2; --bg:#ffffff; --muted:#f7fafb;
-      --brand:#37C3AF; --brand-ink:#0d3e38; --dark:#0f1113;
-    }
+    :root{--ink:#121417;--sub:#596775;--line:#e5ecf0;--bg:#ffffff;--muted:#f8fafb;--brand:#2aa08f}
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--ink);
-      font:15.8px/1.7 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,"Noto Sans",sans-serif;
-      -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
-    a{color:var(--brand-ink);text-decoration:underline}
-    a:hover{text-decoration:none}
-    .wrap{max-width:1140px;margin:auto;padding:0 18px 44px}
-
-    /* HERO – clair premium */
-    .hero{
-      background:
-        radial-gradient(900px 420px at 10% 10%, rgba(55,195,175,0.18), rgba(55,195,175,0) 60%),
-        linear-gradient(180deg, #f9fdfc 0%, #f4fbf9 100%);
-      color:var(--ink);
-      position:relative;
-      overflow:hidden;
-    }
-    .hero .inner{max-width:1140px;margin:0 auto;padding:28px 18px 36px;display:grid;gap:10px}
-    .brand{display:flex;align-items:center;gap:16px}
-    .brand-logo{width:160px;height:auto;display:block;border-radius:10px;box-shadow:0 6px 16px rgba(16,19,22,.06)}
-    h1{margin:6px 0 0;font:800 clamp(26px,3vw,38px)/1.15 Montserrat,Inter;color:var(--ink)}
-    .hero .lede{margin:6px 0 0;color:#306a62}
-    .hero .meta{margin:2px 0 0;color:#6b7a86;font-size:13.5px}
-    .hero .tags{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-    .tag{padding:6px 10px;border:1px solid #d7ece8;background:#eef8f6;color:#0d3e38;
-      border-radius:999px;font-size:12.5px;font-weight:600}
-    .hero::after{
-      content:"";position:absolute;left:0;right:0;bottom:-1px;height:36px;
-      background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="36" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,12 C300,48 900,-24 1200,12 L1200,36 L0,36 Z" fill="%23ffffff"/></svg>') center/cover no-repeat;
-    }
-
-    /* TOC */
-    nav.toc{border-bottom:1px solid var(--line);background:var(--muted)}
-    nav.toc .inner{max-width:1140px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap;padding:8px 18px}
-    nav.toc a{padding:7px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#0d3e38;text-decoration:none}
-    nav.toc a:hover{background:#eef7f5}
-
-    /* SECTIONS */
-    section{padding:24px 0;border-bottom:1px solid var(--line)}
-    section:last-of-type{border-bottom:none}
-    h2{margin:0 0 12px;font:800 20px/1.3 Montserrat,Inter}
-    h3{margin:0 0 8px;font:700 16.5px/1.35 Montserrat,Inter}
-    .sub{margin:0 0 12px;color:var(--sub)}
-    .note{border-left:4px solid var(--brand);background:#fff;border:1px solid var(--line);padding:12px;border-radius:10px}
-
-    /* GRID & CARDS */
-    .cols{display:grid;gap:18px}
-    @media(min-width:900px){ .cols{grid-template-columns:1fr 1fr} }
-    .grid-3{display:grid;gap:16px}
-    @media(min-width:980px){ .grid-3{grid-template-columns:1fr 1fr 1fr} }
-    .card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-    .card header{display:flex;align-items:center;justify-content:space-between;gap:8px;
-      padding:10px 12px;border-bottom:1px solid var(--line);margin:0;background:#fbfdfe}
-    .badge{padding:4px 8px;border:1px solid var(--line);border-radius:999px;font-size:12px;background:#f8fafb;color:#2a3c41}
-    .table-wrap{padding:10px;overflow:auto}
+    body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.65 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+    a{color:#0e3b36;text-decoration:underline} a:hover{text-decoration:none}
+    .wrap{max-width:1060px;margin:auto;padding:28px 18px 44px}
+    header.site{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+    .logo{width:44px;height:44px;border-radius:10px;background:#111;color:#fff;display:grid;place-items:center;font-weight:700}
+    .logo::after{content:"E";font-size:19px}
+    h1{margin:0;font:700 clamp(22px,2.6vw,30px)/1.25 Inter}
+    .lede{color:var(--sub);margin:6px 0 2px}
+    .meta{font-size:13px;color:#596775;margin-top:4px}
+    nav.toc{margin-top:14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--muted)}
+    nav.toc .inner{display:flex;gap:10px;flex-wrap:wrap;padding:8px 10px}
+    nav.toc a{display:inline-block;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;text-decoration:none;color:#0e3b36}
+    section{padding:22px 0;border-bottom:1px solid var(--line)} section:last-of-type{border-bottom:none}
+    h2{margin:0 0 10px;font:700 18px/1.3 Inter} h3{margin:0 0 8px;font:600 16px/1.35 Inter}
+    .sub{color:var(--sub);margin:0 0 12px}
+    .cols{display:grid;gap:18px} @media(min-width:860px){.cols{grid-template-columns:1fr 1fr}}
+    .card{background:#fff;border:1px solid var(--line);border-radius:10px}
+    .card header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);margin:0}
+    .badge{display:inline-block;padding:4px 8px;border:1px solid var(--line);border-radius:999px;font-size:12px;background:#f8fafb}
+    .table-wrap{padding:10px;overflow-x:auto}
     table{width:100%;border-collapse:collapse;font-size:14px}
-    th,td{border:1px solid #e5eaee;padding:8px;text-align:left}
-    th{background:#f5f7f8}
-    .kpi{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 0}
-    .kpi .pill{background:#eef7f5;border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-weight:600;color:#0d3e38}
-
-    /* NEWS CARDS */
-    .news{display:grid;gap:14px}
-    .news .card{display:flex;flex-direction:column}
-    .news .content{padding:12px}
-    .source{font-size:12.5px;color:#6b7a86;margin:0 0 4px}
-    .title{margin:0 0 6px;font-weight:800}
-    .title a{text-decoration:none}
-    .title a:hover{text-decoration:underline}
-    .meta-row{font-size:12.5px;color:#6b7a86}
-
-    /* FOOTER */
-    footer.site{margin-top:26px;padding:16px 0 28px;color:#6b7a86;font-size:13px}
-    .cta{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
-    .btn{padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
-    .btn.primary{background:var(--brand);color:#08302c}
-    .btn.ghost{border:1px solid var(--line);background:#fff;color:#0d3e38}
-
-    /* Éditeur masqué par défaut ; visible avec ?editor=1 */
-    #editor-shortlist{ display:none }
-    html.editor #editor-shortlist{ display:block }
-    #editor-shortlist::before{ content:""; display:block; height:1px; }
+    th,td{border:1px solid #e5eaee;padding:8px;text-align:left} th{background:#f5f7f8}
+    .grid-2{display:grid;gap:18px} @media(min-width:860px){.grid-2{grid-template-columns:1fr 1fr}}
+    ul.clean{margin:0;padding-left:18px} ul.clean li{margin:4px 0}
+    .newslist{display:grid;gap:12px} .newslist article{border-left:4px solid var(--brand);background:#fff;border:1px solid var(--line);padding:12px;border-radius:8px}
+    footer.site{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:#596775}
   </style>
 </head>
 <body>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="inner">
-    <div class="brand">
-      <img class="brand-logo" src="Echom-Energie_logo fond noir.jpg" alt="Echome Energies — logo">
-      <div>
-        <h1>Newsletter — Echome Energies</h1>
-        <p class="lede">Produire, consommer, recharger — en toute confiance.</p>
-        <p class="meta">Édition <time id="edition-date"></time> · Sources : CRE · Photovoltaïque.info · Veille sectorielle</p>
-      </div>
-    </div>
-    <div class="tags">
-      <span class="tag">Tarifs & Primes CRE</span>
-      <span class="tag">Actualités photovoltaïque</span>
-      <span class="tag">Innovation & cas clients</span>
-    </div>
-  </div>
-</section>
-
-<!-- TOC -->
-<nav class="toc"><div class="inner">
-  <a href="#presentation">Présentation</a>
-  <a href="#tarifs-prime">Tarifs & Prime</a>
-  <a href="#editor-shortlist">Pré-sélection</a>
-  <a href="#actus">Actus PV</a>
-  <a href="#innovation">Innovation</a>
-  <a href="#cas-client">Cas client</a>
-  <a href="#conseil">Conseil</a>
-  <a href="#sources">Sources</a>
-  <a href="#contact">Contact</a>
-</div></nav>
-
 <div class="wrap">
 
-  <!-- PRÉSENTATION -->
-  <section id="presentation">
-    <h2>Présentation — Echome Energies</h2>
-    <div class="note">
-      <p><strong>Echome Energies</strong> est une entreprise indépendante spécialisée dans le photovoltaïque (résidentiel, PME, collectivités) en Isère et région AURA. Notre promesse&nbsp;: <em>un accompagnement clé en main, des solutions fiables et un pilotage intelligent</em> (autoconsommation, stockage virtuel, gestion des usages).</p>
-      <p>De l’étude à la mise en service, nous visons un résultat concret&nbsp;: <strong>baisser durablement votre facture et sécuriser votre production</strong>, avec un suivi transparent et des conseils utiles à chaque étape.</p>
+  <header class="site">
+    <div class="logo" aria-hidden="true"></div>
+    <div>
+      <h1>Newsletter — Echome Énergies</h1>
+      <p class="lede">Synthèse CRE : tarifs d’achat (EDF OA) & prime à l’autoconsommation · Actualités photovoltaïque · Ressources utiles.</p>
+      <p class="meta">Édition <time>15/09/2025</time> · Sources : CRE · Photovoltaïque.info · Sélection de veille</p>
     </div>
-  </section>
+  </header>
 
-  <!-- ESSENTIEL -->
-  <section id="essentiel">
-    <h2>L’essentiel</h2>
-    <ul class="sub" id="topline-bullets"></ul>
-  </section>
+  <nav class="toc" aria-label="Sommaire">
+    <div class="inner">
+      <a href="#tarifs-prime">Tarifs & Prime</a>
+      <a href="#actu">Actualités PV</a>
+      <a href="#innovation">Innovation</a>
+      <a href="#cas-client">Cas client</a>
+      <a href="#conseil">Conseil</a>
+      <a href="#sources">Sources</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
 
-  <!-- TARIFS & PRIME -->
+  <!-- TARIFS & PRIME (données injectées au build) -->
   <section id="tarifs-prime">
     <h2>Tarifs d’achat (EDF OA) et prime à l’autoconsommation — mise à jour CRE</h2>
     <div class="cols">
       <article class="card">
-        <header><h3>Tarifs OA</h3><span class="badge">MàJ <time id="maj-tarifs"></time></span></header>
+        <header>
+          <h3>Tarifs d’achat (EDF OA)</h3>
+          <span class="badge">MàJ : <time>15/09/2025</time></span>
+        </header>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Puissance</th><th>Tarif (€/kWh)</th><th>Exemple</th></tr></thead>
-            <tbody id="tarifs-body"></tbody>
+            <tbody>
+              <tr><td colspan="3">Non disponible</td></tr>
+            </tbody>
           </table>
         </div>
       </article>
+
       <article class="card">
-        <header><h3>Prime autoconsommation (≤ 100 kWc)</h3><span class="badge">MàJ <time id="maj-prime"></time></span></header>
+        <header>
+          <h3>Prime à l’autoconsommation (≤ 100 kWc)</h3>
+          <span class="badge">MàJ : <time>15/09/2025</time></span>
+        </header>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Puissance</th><th>Prime (€/kWc)</th></tr></thead>
-            <tbody id="primes-body"></tbody>
+            <tbody>
+              <tr><td colspan="2">Non disponible</td></tr>
+            </tbody>
           </table>
         </div>
       </article>
     </div>
-    <div class="note" id="delta-cre"><strong>Ce que ça change :</strong></div>
-    <div class="kpi">
-      <span class="pill">Autoconsommation typique : ~60 %</span>
-      <span class="pill">Surplus valorisé au tarif OA</span>
+    <p class="sub" style="margin-top:10px">Les niveaux varient selon la tranche de puissance et la période CRE.</p>
+  </section>
+
+  <!-- ACTUALITÉS (issues de reports/feeds.json) -->
+  <section id="actu">
+    <h2>Actualités photovoltaïque (sélection)</h2>
+    <div class="newslist">
+      <article><h3>Aucune actualité</h3><p>Le flux n’a pas encore été alimenté.</p></article>
     </div>
   </section>
 
-  <!-- STEP 2 – PRÉ-SÉLECTION (masqué sans ?editor=1) -->
-  <section id="editor-shortlist">
-    <h2 style="display:flex;align-items:center;gap:8px">
-      Shortlist mensuelle (proposition)
-      <span class="badge">Step 2 — Pré-sélection</span>
-    </h2>
-    <p class="sub">Proposition automatique issue des 20 newsletters suivies. Valide 1 sujet “Zoom Actu” et 1 sujet “Tendance marché”.</p>
-
-    <div class="cols" id="shortlist-cards"></div>
-
-    <div class="note" id="synthese-tendances" style="margin-top:12px">
-      <strong>Synthèse des tendances :</strong>
-      <ul id="trend-bullets" class="sub" style="margin:8px 0 0"></ul>
-    </div>
-
-    <div class="cols" style="margin-top:12px">
-      <div class="note" id="zoom-proposal">
-        <h3>Suggestion Zoom Actu</h3>
-        <p class="sub" id="zoom-expl"></p>
-      </div>
-      <div class="note" id="trend-proposal">
-        <h3>Suggestion Tendance marché</h3>
-        <p class="sub" id="trend-expl"></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ACTUS PV -->
-  <section id="actus">
-    <h2>Actualités photovoltaïque</h2>
-    <div class="grid-3 news" id="news-cards"></div>
-  </section>
-
-  <!-- INNOVATION / ACC -->
+  <!-- ÉDITORIAL -->
   <section id="innovation">
-    <h2>Innovation & solutions — Autoconsommation collective (ACC)</h2>
-    <div class="cols">
-      <div class="note">
-        <h3>Le principe</h3>
-        <p>L’ACC répartit la production d’une installation entre plusieurs consommateurs d’un même périmètre (<strong>généralement ≤ 2 km</strong>). Un <strong>PMO</strong> organise la répartition, la gestion des conventions et le lien avec le GRD.</p>
+    <h2>Innovation & solutions</h2>
+    <div class="grid-2">
+      <div>
+        <h3>Point technique</h3>
+        <p>Décrire en 2–3 phrases l’innovation mise en avant (ex. pilotage des usages, stockage, agrivoltaïsme).</p>
       </div>
-      <div class="note">
-        <h3>Applications concrètes</h3>
-        <ul class="sub" style="margin:0">
-          <li>Résidentiel : partage de la production d’un immeuble / quartier</li>
-          <li>PME/collectivités : valorisation locale sur sites proches</li>
-          <li>Supervision : suivi conso/production, alertes, optimisation</li>
+      <div>
+        <h3>Application concrète</h3>
+        <ul class="clean">
+          <li>Cas d’usage 1</li><li>Cas d’usage 2</li><li>Cas d’usage 3</li>
         </ul>
       </div>
     </div>
-    <div class="note" style="margin-top:12px">
-      <h3>Alternative/Complément — MySmartBattery</h3>
-      <p>Un pilotage intelligent (virtuel/physique) maximise l’autoconsommation en décalant les usages (ECS, IRVE, PAC) vers les heures PV. Résultat&nbsp;: moins d’achats réseau, meilleure valorisation du surplus.</p>
-    </div>
   </section>
 
-  <!-- CAS CLIENT -->
   <section id="cas-client">
-    <h2>Cas client — Maison 6 kWc + MySmartBattery</h2>
-    <ul class="sub">
-      <li>Production annuelle estimée : ~6 600 kWh</li>
-      <li>Autoconsommation : jusqu’à ~100 % grâce à la batterie virtuelle</li>
-      <li>Économie annuelle estimée : ~2 176 € (selon usages)</li>
-      <li>Confort : pilotage ECS & recharge véhicule</li>
+    <h2>Cas client</h2>
+    <p class="sub">Présentation brève d’une installation (site, puissance, objectifs, résultats mesurés).</p>
+    <ul class="clean">
+      <li>Site : [Maison/PME] — Puissance : [9/36 kWc]</li><li>Prod. annuelle : [x] kWh — Autoconsommation : [x] %</li><li>Économie annuelle : [x] € — CO₂ évité : [x] t/an</li>
     </ul>
   </section>
 
-  <!-- CONSEIL -->
   <section id="conseil">
-    <h2>Conseil — Bien dimensionner l’autoconsommation</h2>
-    <div class="cols">
-      <div class="note"><h3>Rappel</h3><p>Prioriser les usages en journée (ECS/IRVE/PAC), lisser les pointes et surveiller le <em>taux d’autoconsommation</em> vs. <em>autosuffisance</em>. Une ACC ou une batterie virtuelle peut compléter le schéma.</p></div>
-      <div class="note"><h3>À retenir</h3><ul class="sub"><li>Puissance adaptée aux profils de charge</li><li>Optimisation par pilotage connecté</li><li>Vérifier les aides locales & guichets ouverts</li></ul></div>
-    </div>
+    <h2>Conseil</h2>
+    <ul class="clean">
+      <li>Dimensionnement et programmation ECS</li><li>Pilotage IRVE/PAC</li><li>Suivi & maintenance</li>
+    </ul>
   </section>
 
-  <!-- SOURCES -->
   <section id="sources">
     <h2>Sources officielles</h2>
-    <ul class="sub">
-      <li>CRE — arrêtés & appels d’offres (tarifs & primes)</li>
-      <li><a href="https://www.photovoltaique.info/fr/tarifs-dachat-et-autoconsommation/" target="_blank" rel="noopener">Photovoltaïque.info (INES/CEA)</a></li>
+    <ul class="clean">
+      <li>CRE — arrêtés tarifaires et périodes de référence</li>
+      <li>Photovoltaïque.info (INES/CEA) — synthèses tarifs & autoconsommation</li>
     </ul>
   </section>
 
-  <!-- CONTACT -->
   <section id="contact">
     <h2>Contact</h2>
-    <p class="sub">Echome Energies — Saint-Quentin-sur-Isère</p>
-    <p class="sub">☎ <a href="tel:+33476373462">04 76 37 34 62</a> · ✉ <a href="mailto:contact@echome-energies.fr">contact@echome-energies.fr</a></p>
+    <p class="sub">Echome Énergies — 1159 rue de la Galandrine, 38210 Saint-Quentin-sur-Isère</p>
+    <p class="sub">Tél. <a href="tel:+33476373462">04 76 37 34 62</a> — <a href="mailto:contact@echome-energies.fr">contact@echome-energies.fr</a></p>
   </section>
 
-  <footer class="site">
-    <div class="cta">
-      <a class="btn primary" href="#contact">Parlons de votre projet</a>
-      <a class="btn ghost" href="#tarifs-prime">Voir tarifs & primes</a>
-    </div>
-    <p>© <span id="year"></span> Echome Energies</p>
-  </footer>
-
+  <footer class="site">© <span>2025</span> Echome Énergies — Tous droits réservés.</footer>
 </div>
-
-<!-- Active le mode éditeur si ?editor=1 -->
-<script>
-  (function(){
-    const q = new URLSearchParams(location.search);
-    if (q.get('editor') === '1') document.documentElement.classList.add('editor');
-  })();
-</script>
-
-<!-- Dates + chargement Tarifs/Primes + cartes Actus -->
-<script>
-  const now=new Date(),fr=now.toLocaleDateString('fr-FR');
-  (d=>{d('edition-date').textContent=fr;d('maj-tarifs').textContent=fr;d('maj-prime').textContent=fr;d('year').textContent=now.getFullYear();})(id=>document.getElementById(id));
-
-  const safeLoad=async u=>{try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw 0;return await r.json()}catch{return null}};
-
-  (async()=>{
-    // formatage EU + valeurs manquantes
-    const toComma = v => (v==null || v==='') ? '—' : (''+v).replace('.',',');
-    const kwh = v => (v==null || v==='') ? '—' : Number(v).toFixed(4).replace('.',',');
-    const safe = s => s==null || s==='' ? '—' : s;
-
-    const tarifs=await safeLoad('../data/tarifs.json')||await safeLoad('data/tarifs.json');
-    if(Array.isArray(tarifs)&&tarifs.length){
-      document.getElementById('tarifs-body').innerHTML=tarifs.map(t=>`<tr><td>${safe(t.puissance)}</td><td>${kwh(t.tarif)}</td><td>${safe(t.exemple)}</td></tr>`).join('');
-    }
-    const primes=await safeLoad('../data/primes.json')||await safeLoad('data/primes.json');
-    if(Array.isArray(primes)&&primes.length){
-      document.getElementById('primes-body').innerHTML=primes.map(p=>`<tr><td>${safe(p.puissance)}</td><td>${toComma(p.prime)}</td></tr>`).join('');
-    }
-  })();
-
-  (async()=>{
-    const feeds=await safeLoad('../reports/feeds.json')||await safeLoad('reports/feeds.json');
-    if(!feeds||!feeds.items)return;
-    const items=feeds.items.slice(0,3);
-    // “L’essentiel” (si non rempli par Step 2)
-    if(document.getElementById('topline-bullets') && !document.getElementById('topline-bullets').children.length){
-      document.getElementById('topline-bullets').innerHTML=items.map(it=>`<li>${(it.title||'').replace(/</g,'&lt;')}</li>`).join('');
-    }
-    // Cartes “Actus”
-    document.getElementById('news-cards').innerHTML=items.map(it=>{
-      const d = it.date || it.scraped_at;
-      const when = d ? new Date(d).toLocaleDateString('fr-FR') : 'Sélection';
-      const title = (it.title||'').replace(/</g,'&lt;');
-      const src = it.source_name || '';
-      const url = it.url || '#';
-      return `
-        <article class="card"><div class="content">
-          <p class="source"><span class="badge">Actu</span> ${src}</p>
-          <h3 class="title"><a href="${url}" target="_blank" rel="noopener">${title}</a></h3>
-          <p class="meta-row">${when}</p>
-        </div></article>`;
-    }).join('');
-  })();
-</script>
-
-<!-- STEP 2 – Pré-sélection (shortlist + synthèse + propositions) -->
-<script>
-(async () => {
-  const tryJson = async (u)=>{ try{const r=await fetch(u,{cache:'no-store'}); if(!r.ok) throw 0; return await r.json();}catch{return null;} };
-  const fmt = (d)=> d ? new Date(d).toLocaleDateString('fr-FR') : '—';
-
-  const THEMES = [
-    {key:'Prix',           rx:/(prix|price|tarif|€/i), weight:2},
-    {key:'Régulation',     rx:/(cre|arrete|decret|appel d'offres|ao|r[eé]gulation|tva|guichet)/i, weight:3},
-    {key:'Stockage',       rx:/(batterie|storage|v2h|v2g|virtuel|mysmartbattery|powerwall|stockage)/i, weight:2},
-    {key:'AgriPV',         rx:/(agrivolta|agri[-\s]?photovolta|serre|elevage|parc agr)/i, weight:2},
-    {key:'BIPV',           rx:/(bipv|integre|tuiles? solaires?|facade|batiment)/i, weight:1},
-    {key:'Tendance',       rx:/(marche|tendance|record|gigafactory|investissement|silicium|capacit[eé]s)/i, weight:1},
-  ];
-  const deaccent = s => (s||'')
-    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-    .replace(/’/g,"'");
-
-  const feeds = await tryJson('../reports/feeds.json') || await tryJson('reports/feeds.json');
-  if(!feeds || !Array.isArray(feeds.items) || !feeds.items.length){
-    const cont = document.getElementById('shortlist-cards');
-    if(cont) cont.innerHTML = '<p class="sub">Aucune donnée dispo (feeds.json introuvable). Le module reste en veille.</p>';
-    return;
-  }
-
-  // updated/scraped_at + volume
-  const updated =
-    feeds.updated || feeds.scraped_at ||
-    (feeds.items[0] && (feeds.items[0].scraped_at || feeds.items[0].date)) || null;
-  const shortSub = document.querySelector('#editor-shortlist .sub');
-  if (shortSub) {
-    const parts = [];
-    if (updated) parts.push(`Données du ${fmt(updated)}`);
-    if (typeof feeds.count === 'number') parts.push(`${feeds.count} actus agrégées`);
-    if (parts.length) shortSub.textContent += ` · ${parts.join(' · ')}`;
-  }
-
-  // scoring
-  const scoreOne = (it) => {
-    const text = deaccent([it.title, it.summary, it.source_name].filter(Boolean).join(' '));
-    let label = 'Tendance', score = 0;
-    for (const th of THEMES){
-      if (th.rx.test(text)){ score += th.weight; label = th.key; }
-    }
-    const ageDays = it.date ? (Date.now()-new Date(it.date).getTime())/86400000 : 999;
-    if (ageDays < 7) score += 3; else if (ageDays < 14) score += 2; else if (ageDays < 45) score += 1;
-    const title = deaccent(it.title||'');
-    if (label!=='Tendance' && (title.match(THEMES.find(t=>t.key===label)?.rx)||[]).length>1) score += 1;
-    return {...it, score, label, ageDays};
-  };
-
-  // tri + diversité de sources
-  const all = feeds.items.map(scoreOne).sort((a,b)=> b.score - a.score);
-  const shortlist = [];
-  const seenSrc = new Set();
-  for(const it of all){
-    const src = it.source_name || it.source || 'source';
-    if(seenSrc.has(src)) continue;
-    shortlist.push(it);
-    seenSrc.add(src);
-    if (shortlist.length >= 5) break;
-  }
-
-  // rendu cartes shortlist
-  const htmlCard = (it) => `
-    <article class="card">
-      <header>
-        <span class="badge">${it.label}</span>
-        <span class="sub" style="font-size:12px">${it.source_name||'Source'}</span>
-      </header>
-      <div class="content" style="padding:12px">
-        <h3 class="title" style="margin:0 0 6px"><a target="_blank" rel="noopener" href="${it.url||'#'}">${(it.title||'(sans titre)').replace(/</g,'&lt;')}</a></h3>
-        <p class="meta-row">Publié le ${fmt(it.date || it.scraped_at)} · Score ${it.score}</p>
-      </div>
-    </article>`;
-  const cont = document.getElementById('shortlist-cards');
-  if(cont) cont.innerHTML = shortlist.map(htmlCard).join('');
-
-  // synthèse tendances (top 3 labels)
-  const counts = shortlist.reduce((acc,it)=> (acc[it.label]=(acc[it.label]||0)+1, acc), {});
-  const topLabels = Object.entries(counts).sort((a,b)=> b[1]-a[1]).slice(0,3).map(([k,v])=>({k,v}));
-  const bulletOf = (k)=>({
-    'Prix': 'Prix modules : mouvement notable (opportunité CAPEX/ROI).',
-    'Régulation': 'Réglementaire : fenêtres CRE/arrêtés à surveiller.',
-    'Stockage': 'Stockage résidentiel/PME en montée (couplage PV).',
-    'AgriPV': 'AgriPV : projets et cadre en évolution locale.',
-    'BIPV': 'BIPV : intégration architecturale en progrès.',
-    'Tendance': 'Marché PV : dynamique et volumes en hausse.'
-  }[k] || 'Signal marché pertinent.');
-  const trendsUl = document.getElementById('trend-bullets');
-  if(trendsUl) trendsUl.innerHTML = topLabels.map(({k})=> `<li>${bulletOf(k)}</li>`).join('');
-
-  // propositions Zoom Actu & Tendance marché
-  const pick = (labelWanted) => shortlist.find(it=>it.label===labelWanted) || shortlist[0];
-  const zoom = pick('Régulation') || pick('Prix');
-  const trend = pick('Prix') || pick('Tendance');
-  const explain = (it) => it ? `${it.label} — <a href="${it.url||'#'}" target="_blank" rel="noopener">${(it.title||'Actu sélectionnée').replace(/</g,'&lt;')}</a> · ${fmt(it.date || it.scraped_at)} · ${it.source_name||'Source'}` : '—';
-  const zoomEl = document.getElementById('zoom-expl');
-  const trendEl = document.getElementById('trend-expl');
-  if(zoomEl) zoomEl.innerHTML = explain(zoom);
-  if(trendEl) trendEl.innerHTML = explain(trend);
-
-  // “L’essentiel” auto si vide
-  const topline = [
-    zoom?.label==='Régulation' ? 'Réglementaire : période/arrêté CRE à suivre.' : null,
-    trend?.label==='Prix' ? 'Prix modules : dynamique et écarts par techno.' : null,
-    shortlist.some(i=>i.label==='Stockage') ? 'Stockage : cas d’usage résidentiel/PME en hausse.' : null
-  ].filter(Boolean).slice(0,3);
-  const bulletsEl = document.getElementById('topline-bullets');
-  if (topline.length && bulletsEl && !bulletsEl.children.length){
-    bulletsEl.innerHTML = topline.map(t=>`<li>${t}</li>`).join('');
-  }
-
-  // “Ce que ça change” contextuel
-  const deltaMsg =
-    zoom?.label === 'Régulation' ? 'Réglementaire : fenêtres CRE/arrêtés à saisir rapidement (éligibilité, volumes, guichets).'
-  : trend?.label === 'Prix' ? 'Prix modules en mouvement : arbitrer puissances/technos pour optimiser le ROI sur 18–24 mois.'
-  : shortlist.some(i=>i.label==='Stockage') ? 'Stockage : intérêt accru pour lisser la conso (ECS/IRVE/PAC) et relever l’autoconso.'
-  : 'Marché PV dynamique : conforter l’autoconsommation et la valeur locale.';
-  const deltaEl = document.getElementById('delta-cre');
-  if (deltaEl) deltaEl.innerHTML = '<strong>Ce que ça change :</strong> ' + deltaMsg;
-
-})();
-</script>
-
 </body>
 </html>
