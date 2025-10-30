@@ -8,20 +8,39 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Echome Prospection PV</title>
 <style>
-:root{--brand:#37C3AF;--brand-dark:#2ea898;--carbon:#1C1C1C;--bg:#f8fafc;--text:#0f172a;--muted:#64748b;--r:14px;--shadow:0 6px 18px rgba(16,24,40,.08)}
+:root{
+  --brand:#37C3AF;--brand-dark:#2ea898;--carbon:#1C1C1C;
+  --bg:#f8fafc;--text:#0f172a;--muted:#64748b;--r:14px;--shadow:0 6px 18px rgba(16,24,40,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+/* iOS legacy (<15) */
+@supports(padding: constant(safe-area-inset-top)) {
+  :root{ --safe-top: constant(safe-area-inset-top); }
+}
+
 html,body{height:100%;-webkit-text-size-adjust:100%}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans";background:var(--bg);color:var(--text)}
-/* Header fixé */
-header{position:fixed;inset:0 0 auto 0;z-index:100;background:var(--carbon);color:#fff;box-shadow:0 2px 12px rgba(0,0,0,.15)}
-.header-inner{max-width:880px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+
+/* ===== Header fixé avec safe-area ===== */
+header{
+  position:fixed; inset:0 0 auto 0; z-index:100;
+  background:var(--carbon); color:#fff; box-shadow:0 2px 12px rgba(0,0,0,.15);
+  padding-top:calc(var(--safe-top) + 4px);  /* marge notch */
+}
+.header-inner{
+  max-width:880px; margin:0 auto;
+  padding:8px 16px 10px 16px;              /* le haut est déjà géré par header */
+  display:flex; align-items:center; gap:12px; justify-content:space-between;
+}
 .brand{display:flex;align-items:center;gap:10px}
 .brand .title{font-size:16px;font-weight:700}
 .brand .subtitle{font-size:12px;opacity:.8}
 .top-actions{display:flex;gap:8px;flex-wrap:wrap}
 .top-actions .chip{background:#202324;border:1px solid #2f3336;border-radius:999px;padding:6px 10px;color:#cbd5e1;font-size:12px;cursor:pointer}
 .top-actions .chip.active{background:var(--brand);border-color:var(--brand);color:#fff}
-/* Contenu sous header */
-main{padding-top:64px}
+
+/* ===== Contenu sous header (compense safe-area) ===== */
+main{padding-top:calc(64px + var(--safe-top))}
 .container{max-width:880px;margin:0 auto;padding:16px}
 .card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:16px;margin:16px 0}
 .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -41,10 +60,12 @@ textarea{resize:vertical;min-height:90px}
 .center{display:flex;justify-content:center;align-items:center}
 .kpi{display:flex;gap:8px;flex-wrap:wrap}
 .kpi .pill{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:10px;padding:6px 10px;font-size:12px}
+
 /* Boutons d'action avec icônes */
 .btn-action{display:inline-flex;align-items:center;gap:8px;background:#f1f5f9;color:#0f172a;border:1px solid #e2e8f0;padding:10px 14px;border-radius:12px;text-decoration:none;font-size:14px;font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.05);transition:all .15s ease}
 .btn-action:hover{background:#e2e8f0}
 .btn-action .ic{width:18px;height:18px;fill:var(--brand-dark);display:inline-block}
+
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));background:#0f172a;color:#fff;padding:8px 12px;border-radius:10px;font-size:13px;box-shadow:var(--shadow);z-index:999}
 .overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);display:none;align-items:flex-end;z-index:200}
 .sheet{background:#fff;border-top-left-radius:16px;border-top-right-radius:16px;max-height:85vh;overflow:auto;width:100%;padding:12px}
@@ -150,7 +171,7 @@ textarea{resize:vertical;min-height:90px}
         <div><label>Téléphone</label><input type="tel" id="r1_tel"></div>
         <div><label>E-mail</label><input type="text" id="r1_email"></div>
 
-        <!-- Boutons d'action avec icônes (Material-like) -->
+        <!-- Boutons d'action -->
         <div class="row" style="gap:8px; margin-top:8px">
           <a class="btn-action" id="btnCall" href="#" title="Appeler">
             <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
@@ -158,7 +179,6 @@ textarea{resize:vertical;min-height:90px}
             </svg>
             Appeler
           </a>
-
           <a class="btn-action" id="btnEmail" href="#" title="Envoyer un e-mail">
             <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
@@ -597,7 +617,7 @@ function copyToR1(o){
 }
 function prefillR2(o){
   setActive('r2');
-  r2_id.value=o["Prospect ID"]||'';
+  r2_id.value=o["Prospect ID"]||';
   const ident=`[Identité] ${o["Nom/Prénom"]||''} • ${o["Téléphone"]||''} • ${o["E-mail"]||''}`;
   if(!r2_notes.value.includes(ident)) r2_notes.value=(r2_notes.value? r2_notes.value+'\n' : '')+ident;
   toast('Prospect R1 repris en R2');
