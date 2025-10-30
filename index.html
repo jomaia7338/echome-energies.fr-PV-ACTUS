@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1C1C1C" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Echome Prospection PV – R1 / R2</title>
+  <style>
+    :root{--brand:#37C3AF;--brand-dark:#2ea898;--carbon:#1C1C1C;--bg:#f8fafc;--text:#1C1C1C;--muted:#64748b;--r:14px;--shadow:0 6px 18px rgba(16,24,40,.08)}
+    html,body{height:100%;-webkit-text-size-adjust:100%}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans";background:var(--bg);color:var(--text)}
+    header{padding-top:env(safe-area-inset-top);background:var(--carbon);color:#fff}
+    .container{max-width:720px;margin:0 auto;padding:16px}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:14px;margin:16px 0}
+    .muted{color:var(--muted);font-size:12px}
+    .btn{border-radius:12px;padding:10px 14px;border:1px solid #e2e8f0;background:#fff;font-size:14px}
+    .btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .btn-primary:hover{background:var(--brand-dark)}
+    .file-label{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid #e2e8f0;background:#f1f5f9;font-size:14px;cursor:pointer}
+    .file-input{display:none}
+    .tabs{display:flex;gap:8px;background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:6px;margin:16px 0;position:sticky;top:8px;z-index:10}
+    .tab{flex:1;text-align:center;padding:10px 14px;border-radius:12px;font-weight:600;font-size:14px;border:1px solid transparent}
+    .tab.active{background:var(--brand);color:#fff}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:600px){.grid-2{grid-template-columns:1fr 1fr}}
+    label{font-size:13px;display:block}
+    input,select,textarea{width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #cbd5e1;font-size:16px;background:#fff}
+    textarea{resize:vertical;min-height:90px}
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));background:#0f172a;color:#fff;padding:8px 12px;border-radius:10px;font-size:13px;box-shadow:var(--shadow)}
+    .title{font-size:18px;font-weight:600}
+    .subtitle{font-size:12px;opacity:.8}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+<header>
+  <div class="container row">
+    <div class="row" style="gap:12px">
+      <div class="title">Echome Prospection PV</div>
+      <div class="subtitle">R1 (prospection) & R2 (qualification)</div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- Fichier / Excel -->
+  <div class="card">
+    <div class="row">
+      <div><b>Base Excel</b><div class="muted">Nouvelle base ou chargement existant</div></div>
+      <div class="row" style="gap:8px">
+        <label class="file-label"><input id="fileInput" type="file" accept=".xlsx" class="file-input">Charger</label>
+        <button id="btnNew" class="btn">Nouvelle</button>
+        <button id="btnSave" class="btn btn-primary">Télécharger XLSX</button>
+      </div>
+    </div>
+    <div id="status" class="muted">Aucune base chargée.</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button id="tabR1" class="tab active">R1 – Prospection / Suivi intérêt</button>
+    <button id="tabR2" class="tab">R2 – Qualification technique / Mylight</button>
+  </div>
+
+  <!-- ======================== R1 ======================== -->
+  <form id="formR1" class="card">
+    <div class="grid grid-2">
+      <div><label>Date R1</label><input type="date" id="r1_date"></div>
+      <div>
+        <label>Prospect ID <span class="muted">(ex: P-20251030-1234)</span></label>
+        <div class="row" style="gap:8px">
+          <input type="text" id="r1_id" placeholder="P-aaaammjj-####">
+          <button type="button" id="btnGenId" class="btn">Générer</button>
+        </div>
+      </div>
+      <div><label>NOM / PRÉNOM DU CLIENT</label><input type="text" id="r1_nom"></div>
+      <div><label>TÉLÉPHONE</label><input type="tel" id="r1_tel"></div>
+      <div><label>E-MAIL</label><input type="text" id="r1_email"></div>
+      <div><label>INTERVENANT INTERNE</label><input type="text" id="r1_intervenant"></div>
+      <div><label>RAISON SOCIALE (si pro)</label><input type="text" id="r1_rs"></div>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:8px">
+      <div><label>ADRESSE (ligne libre)</label><input type="text" id="r1_adresse"></div>
+      <div><label>CODE POSTAL</label><input type="text" id="r1_cp"></div>
+      <div><label>COMMUNE</label><input type="text" id="r1_commune"></div>
+      <div>
+        <label>🧭 Géolocalisation</label>
+        <div class="row" style="gap:8px">
+          <select id="geo_mode">
+            <option value="commune">Commune</option>
+            <option value="commune_cp">Commune + CP</option>
+            <option value="full">Adresse complète → Notes</option>
+          </select>
+          <button type="button" id="btnGeo" class="btn">📍 Localiser</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:8px">
+      <div><label>Intérêt</label>
+        <select id="r1_interet"><option value="">—</option><option>Faible</option><option>Moyen</option><option>Fort</option></select>
+      </div>
+      <div><label>Délai projet</label>
+        <select id="r1_delai"><option value="">—</option><option>Immédiat</option><option>≤ 3 mois</option><option>3–6 mois</option><option>> 6 mois</option><option>À définir</option></select>
+      </div>
+      <div><label>Relance – Date</label><input type="date" id="r1_relance_date"></div>
+      <div><label>Relance – Statut</label>
+        <select id="r1_relance_statut"><option>À faire</option><option>Fait</option><option>Reporté</option></select>
+      </div>
+      <div style="grid-column:1/-1"><label>Notes (objections / décideur / motivations)</label><textarea id="r1_notes"></textarea></div>
+    </div>
+
+    <div style="text-align:right;margin-top:8px">
+      <button type="button" id="btnSaveR1" class="btn btn-primary">Enregistrer R1 → Excel</button>
+    </div>
+  </form>
+
+  <!-- ======================== R2 ======================== -->
+  <form id="formR2" class="card" style="display:none">
+    <!-- 2- DONNEES TECHNIQUES INSTALLATION DU KIT -->
+    <div class="title" style="font-size:14px;margin-bottom:6px">Données techniques (installation)</div>
+    <div class="grid grid-2">
+      <div><label>Type toiture existante</label><input type="text" id="r2_toiture" placeholder="tuiles mécaniques / bac acier..."></div>
+      <div><label>Nombre de panneaux + implantation</label><input type="text" id="r2_pv_nb"></div>
+      <div><label>Type de réseau</label>
+        <select id="r2_reseau"><option value="">—</option><option>Monophasé</option><option>Triphasé</option></select>
+      </div>
+      <div><label>Longueur toiture disponible (m)</label><input type="number" id="r2_L" inputmode="decimal"></div>
+      <div><label>Largeur toiture disponible (m)</label><input type="number" id="r2_l" inputmode="decimal"></div>
+      <div><label>Pente toit (°)</label><input type="number" id="r2_pente" inputmode="decimal"></div>
+      <div><label>Demander facture EDF</label>
+        <select id="r2_facture_dem"><option>Non</option><option>Oui</option></select>
+      </div>
+    </div>
+
+    <!-- 3- INFORMATIONS A DEMANDER POUR MYLIGHT -->
+    <div class="title" style="font-size:14px;margin:10px 0 6px">Informations Mylight (profil conso)</div>
+    <div class="grid grid-2">
+      <div><label>Type de chauffage existant</label><input type="text" id="r2_chauff"></div>
+      <div><label>Nombre de personnes</label><input type="number" id="r2_nbpers" inputmode="numeric"></div>
+      <div><label>Profil de présence</label>
+        <select id="r2_presence"><option value="">—</option><option>Toute la journée</option><option>Matin midi soir</option><option>Matin et soir</option></select>
+      </div>
+      <div><label>Surface habitable (m²)</label><input type="number" id="r2_surface" inputmode="numeric"></div>
+      <div><label>Niveau d'isolation</label>
+        <select id="r2_isolation"><option value="">—</option><option>Peu isolé</option><option>Isolé</option><option>Bien isolé</option></select>
+      </div>
+      <div><label>Type ECS</label><input type="text" id="r2_ecs"></div>
+      <div><label>Climatisation</label><select id="r2_clim"><option>Non</option><option>Oui</option></select></div>
+      <div><label>Piscine</label><select id="r2_piscine"><option>Non</option><option>Hors sol</option><option>Ent errée</option></select></div>
+      <div><label>Présence véhicule électrique</label><select id="r2_ve"><option>Non</option><option>Oui</option></select></div>
+      <div><label>Si VE : modèle</label><input type="text" id="r2_ve_modele" placeholder="citadine / berline / SUV"></div>
+      <div><label>Km annuels</label><input type="number" id="r2_km" inputmode="numeric"></div>
+      <div><label>Recharges/sem. domicile</label><input type="number" id="r2_rech_dom" inputmode="numeric"></div>
+      <div><label>Recharges/sem. bureau</label><input type="number" id="r2_rech_bureau" inputmode="numeric"></div>
+      <div><label>Devis borne de recharge ?</label><select id="r2_borne"><option>Non</option><option>Oui</option></select></div>
+    </div>
+
+    <!-- 4- PHOTOS A PRENDRE -->
+    <div class="title" style="font-size:14px;margin:10px 0 6px">Photos à prendre</div>
+    <div class="grid grid-2">
+      <div><label>Toiture</label><select id="r2_photo_toit"><option>Non</option><option>Oui</option></select></div>
+      <div><label>Plan de façade</label><select id="r2_photo_facade"><option>Non</option><option>Oui</option></select></div>
+      <div><label>Photo vue de loin (insertion)</label><select id="r2_photo_vue"><option>Non</option><option>Oui</option></select></div>
+      <div><label>Charpente (vue intérieure + mètre)</label><select id="r2_photo_charp"><option>Non</option><option>Oui</option></select></div>
+      <div><label>Compteur intérieur</label><select id="r2_photo_comp_int"><option>Non</option><option>Oui</option></select></div>
+      <div><label>Compteur extérieur</label><select id="r2_photo_comp_ext"><option>Non</option><option>Oui</option></select></div>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:8px">
+      <div><label>Date R2</label><input type="date" id="r2_date"></div>
+      <div><label>Prospect ID (même que R1)</label><input type="text" id="r2_id" placeholder="P-aaaammjj-####"></div>
+      <div style="grid-column:1/-1"><label>Notes complémentaires</label><textarea id="r2_notes"></textarea></div>
+    </div>
+
+    <div style="text-align:right;margin-top:8px">
+      <button type="button" id="btnSaveR2" class="btn btn-primary">Enregistrer R2 → Excel</button>
+    </div>
+  </form>
+
+  <div class="muted" style="margin-top:8px">© Echome Énergies – usage interne</div>
+</main>
+
+<script>
+/* ---------- Onglets ---------- */
+const tabR1=document.getElementById('tabR1'),tabR2=document.getElementById('tabR2');
+const formR1=document.getElementById('formR1'),formR2=document.getElementById('formR2');
+tabR1.onclick=()=>{tabR1.classList.add('active');tabR2.classList.remove('active');formR1.style.display='block';formR2.style.display='none';};
+tabR2.onclick=()=>{tabR2.classList.add('active');tabR1.classList.remove('active');formR2.style.display='block';formR1.style.display='none';};
+
+/* ---------- Excel ---------- */
+let wb=null;const SHEET_R1='R1_MOBILE',SHEET_R2='R2_MOBILE';
+function statusMsg(m){document.getElementById('status').textContent=m;}
+function newWB(){
+  wb=XLSX.utils.book_new();
+  const r1H=["Date R1","Prospect ID","Nom/Prénom","Téléphone","E-mail","Intervenant interne","Raison sociale","Adresse","CP","Commune","Intérêt","Délai projet","Relance date","Relance statut","Notes"];
+  const r2H=["Date R2","Prospect ID",
+    "Type toiture existante","Nombre panneaux + implantation","Type de réseau",
+    "Longueur dispo (m)","Largeur dispo (m)","Pente toit (°)","Demander facture EDF",
+    "Type chauffage","Nb personnes","Profil présence","Surface habitable (m²)","Niveau d'isolation","Type ECS","Climatisation","Piscine",
+    "Présence VE","VE modèle","Km annuels","Recharges/sem domicile","Recharges/sem bureau","Devis borne recharge",
+    "Photos Toiture","Photos Façade","Photos Vue","Photos Charpente","Photos Cpt Int","Photos Cpt Ext",
+    "Notes complémentaires"];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([r1H]),SHEET_R1);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([r2H]),SHEET_R2);
+  statusMsg("Nouvelle base prête.");
+}
+function loadFile(file){
+  const r=new FileReader();
+  r.onload=e=>{const data=new Uint8Array(e.target.result);wb=XLSX.read(data,{type:'array'});if(!wb.Sheets[SHEET_R1]||!wb.Sheets[SHEET_R2]) newWB();statusMsg("Base chargée : "+file.name);};
+  r.readAsArrayBuffer(file);
+}
+function downloadWB(){
+  if(!wb) newWB();
+  const blob=new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array'})],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='Prospection_PV.xlsx';a.click();URL.revokeObjectURL(url);
+}
+document.getElementById('fileInput').onchange=(e)=>{const f=e.target.files?.[0];if(f) loadFile(f);};
+document.getElementById('btnNew').onclick=newWB;
+document.getElementById('btnSave').onclick=downloadWB;
+
+/* ---------- Helpers ---------- */
+function todayISO(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+document.getElementById('r1_date').value=todayISO();document.getElementById('r2_date').value=todayISO();
+document.getElementById('btnGenId').onclick=()=>{const d=new Date(),rnd=Math.floor(1000+Math.random()*9000);document.getElementById('r1_id').value=`P-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${rnd}`;};
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1500);}
+
+/* ---------- Géoloc + reverse geocode (OSM Nominatim) ---------- */
+async function reverseGeocode(lat,lon){
+  const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`,{headers:{'Accept':'application/json'}});
+  if(!res.ok) throw new Error('Geocoding error'); return res.json();
+}
+document.getElementById('btnGeo').onclick=()=>{
+  const mode=document.getElementById('geo_mode').value;
+  if(!navigator.geolocation){toast('Géoloc non supportée');return;}
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    try{
+      const {latitude,longitude}=pos.coords;const data=await reverseGeocode(latitude,longitude);
+      const a=data.address||{};const commune=a.city||a.town||a.village||a.municipality||'';const cp=a.postcode||'';const full=data.display_name||'';
+      if(mode==='commune'){document.getElementById('r1_commune').value=commune;}
+      else if(mode==='commune_cp'){document.getElementById('r1_commune').value=commune;document.getElementById('r1_cp').value=cp;}
+      else{document.getElementById('r1_commune').value=commune;document.getElementById('r1_cp').value=cp;document.getElementById('r1_notes').value=(document.getElementById('r1_notes').value?document.getElementById('r1_notes').value+'\\n':'')+`[Adresse] ${full}`;}
+      toast('Position capturée');
+    }catch(e){toast('Échec géocodage');}
+  },()=>toast('Géoloc refusée'));
+};
+
+/* ---------- Enregistrements ---------- */
+function req(obj,fields){const miss=fields.filter(f=>!obj[f]||String(obj[f]).trim()==='');if(miss.length){toast("Champs requis: "+miss.join(", "));return false;}return true;}
+
+document.getElementById('btnSaveR1').onclick=()=>{
+  if(!wb) newWB();
+  const H=["Date R1","Prospect ID","Nom/Prénom","Téléphone","E-mail","Intervenant interne","Raison sociale","Adresse","CP","Commune","Intérêt","Délai projet","Relance date","Relance statut","Notes"];
+  const rec={
+    "Date R1":document.getElementById('r1_date').value||'',
+    "Prospect ID":document.getElementById('r1_id').value.trim(),
+    "Nom/Prénom":document.getElementById('r1_nom').value.trim(),
+    "Téléphone":document.getElementById('r1_tel').value.trim(),
+    "E-mail":document.getElementById('r1_email').value.trim(),
+    "Intervenant interne":document.getElementById('r1_intervenant').value.trim(),
+    "Raison sociale":document.getElementById('r1_rs').value.trim(),
+    "Adresse":document.getElementById('r1_adresse').value.trim(),
+    "CP":document.getElementById('r1_cp').value.trim(),
+    "Commune":document.getElementById('r1_commune').value.trim(),
+    "Intérêt":document.getElementById('r1_interet').value,
+    "Délai projet":document.getElementById('r1_delai').value,
+    "Relance date":document.getElementById('r1_relance_date').value||'',
+    "Relance statut":document.getElementById('r1_relance_statut').value,
+    "Notes":document.getElementById('r1_notes').value.trim()
+  };
+  if(!req(rec,["Prospect ID","Nom/Prénom","Téléphone"])) return;
+  const ws=wb.Sheets[SHEET_R1];const data=XLSX.utils.sheet_to_json(ws,{header:1});if(data.length===0) data.push(H);
+  data.push(H.map(k=>rec[k]??''));wb.Sheets[SHEET_R1]=XLSX.utils.aoa_to_sheet(data);
+  toast("R1 enregistré");statusMsg("R1 enregistré.");
+};
+
+document.getElementById('btnSaveR2').onclick=()=>{
+  if(!wb) newWB();
+  const H=["Date R2","Prospect ID","Type toiture existante","Nombre panneaux + implantation","Type de réseau","Longueur dispo (m)","Largeur dispo (m)","Pente toit (°)","Demander facture EDF","Type chauffage","Nb personnes","Profil présence","Surface habitable (m²)","Niveau d'isolation","Type ECS","Climatisation","Piscine","Présence VE","VE modèle","Km annuels","Recharges/sem domicile","Recharges/sem bureau","Devis borne recharge","Photos Toiture","Photos Façade","Photos Vue","Photos Charpente","Photos Cpt Int","Photos Cpt Ext","Notes complémentaires"];
+  const rec={
+    "Date R2":document.getElementById('r2_date').value||'',
+    "Prospect ID":document.getElementById('r2_id').value.trim(),
+    "Type toiture existante":document.getElementById('r2_toiture').value.trim(),
+    "Nombre panneaux + implantation":document.getElementById('r2_pv_nb').value.trim(),
+    "Type de réseau":document.getElementById('r2_reseau').value,
+    "Longueur dispo (m)":document.getElementById('r2_L').value||'',
+    "Largeur dispo (m)":document.getElementById('r2_l').value||'',
+    "Pente toit (°)":document.getElementById('r2_pente').value||'',
+    "Demander facture EDF":document.getElementById('r2_facture_dem').value,
+    "Type chauffage":document.getElementById('r2_chauff').value.trim(),
+    "Nb personnes":document.getElementById('r2_nbpers').value||'',
+    "Profil présence":document.getElementById('r2_presence').value,
+    "Surface habitable (m²)":document.getElementById('r2_surface').value||'',
+    "Niveau d'isolation":document.getElementById('r2_isolation').value,
+    "Type ECS":document.getElementById('r2_ecs').value.trim(),
+    "Climatisation":document.getElementById('r2_clim').value,
+    "Piscine":document.getElementById('r2_piscine').value,
+    "Présence VE":document.getElementById('r2_ve').value,
+    "VE modèle":document.getElementById('r2_ve_modele').value.trim(),
+    "Km annuels":document.getElementById('r2_km').value||'',
+    "Recharges/sem domicile":document.getElementById('r2_rech_dom').value||'',
+    "Recharges/sem bureau":document.getElementById('r2_rech_bureau').value||'',
+    "Devis borne recharge":document.getElementById('r2_borne').value,
+    "Photos Toiture":document.getElementById('r2_photo_toit').value,
+    "Photos Façade":document.getElementById('r2_photo_facade').value,
+    "Photos Vue":document.getElementById('r2_photo_vue').value,
+    "Photos Charpente":document.getElementById('r2_photo_charp').value,
+    "Photos Cpt Int":document.getElementById('r2_photo_comp_int').value,
+    "Photos Cpt Ext":document.getElementById('r2_photo_comp_ext').value,
+    "Notes complémentaires":document.getElementById('r2_notes').value.trim()
+  };
+  if(!req(rec,["Prospect ID"])) return;
+  const ws=wb.Sheets[SHEET_R2];const data=XLSX.utils.sheet_to_json(ws,{header:1});if(data.length===0) data.push(H);
+  data.push(H.map(k=>rec[k]??''));wb.Sheets[SHEET_R2]=XLSX.utils.aoa_to_sheet(data);
+  toast("R2 enregistré");statusMsg("R2 enregistré.");
+};
+</script>
+</body>
+</html>
