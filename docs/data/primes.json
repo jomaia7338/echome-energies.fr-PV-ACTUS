@@ -1,6 +1,0 @@
-
-[
-  { "puissance": "≤ 9 kWc",    "prime": 80 },
-  { "puissance": "9–36 kWc",   "prime": 180 },
-  { "puissance": "36–100 kWc", "prime": 90 }
-]
