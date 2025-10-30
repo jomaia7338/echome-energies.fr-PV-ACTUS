@@ -1,176 +1,315 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <meta name="theme-color" content="#1C1C1C"/>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Echome Prospection PV – R1/R2 (Recherche + Géoloc)</title>
-  <style>
-    :root{--brand:#37C3AF;--brand-dark:#2ea898;--carbon:#1C1C1C;--bg:#f8fafc;--text:#0f172a;--muted:#64748b;--r:14px;--shadow:0 6px 18px rgba(16,24,40,.08)}
-    html,body{height:100%;-webkit-text-size-adjust:100%}
-    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans";background:var(--bg);color:var(--text)}
-    header{padding-top:env(safe-area-inset-top);background:var(--carbon);color:#fff}
-    .container{max-width:720px;margin:0 auto;padding:16px}
-    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    .card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:14px;margin:16px 0}
-    .muted{color:var(--muted);font-size:12px}
-    .badge{background:#eef2ff;border:1px solid #c7d2fe;border-radius:999px;padding:4px 8px;font-size:12px}
-    .btn{border-radius:12px;padding:10px 14px;border:1px solid #e2e8f0;background:#fff;font-size:14px}
-    .btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}
-    .btn-primary:hover{background:var(--brand-dark)}
-    .file-label{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid #e2e8f0;background:#f1f5f9;font-size:14px;cursor:pointer}
-    .file-input{display:none}
-    .tabs{display:flex;gap:8px;background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:6px;margin:16px 0;position:sticky;top:8px;z-index:10}
-    .tab{flex:1;text-align:center;padding:10px 14px;border-radius:12px;font-weight:600;font-size:14px;border:1px solid transparent}
-    .tab.active{background:var(--brand);color:#fff}
-    .grid{display:grid;grid-template-columns:1fr;gap:12px}
-    @media(min-width:600px){.grid-2{grid-template-columns:1fr 1fr}}
-    label{font-size:13px;display:block}
-    input,select,textarea{width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #cbd5e1;font-size:16px;background:#fff}
-    textarea{resize:vertical;min-height:90px}
-    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));background:#0f172a;color:#fff;padding:8px 12px;border-radius:10px;font-size:13px;box-shadow:var(--shadow)}
-    .overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);display:none;align-items:flex-end}
-    .sheet{background:#fff;border-top-left-radius:16px;border-top-right-radius:16px;max-height:85vh;overflow:auto;width:100%;padding:12px}
-    .item{padding:10px;border:1px solid #e2e8f0;border-radius:12px;margin:8px 0}
-    .searchbar{display:flex;gap:8px;margin-bottom:8px}
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="theme-color" content="#1C1C1C"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Echome Prospection PV</title>
+<style>
+:root{--brand:#37C3AF;--brand-dark:#2ea898;--carbon:#1C1C1C;--bg:#f8fafc;--text:#0f172a;--muted:#64748b;--r:14px;--shadow:0 6px 18px rgba(16,24,40,.08)}
+html,body{height:100%;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans";background:var(--bg);color:var(--text)}
+/* Header fixé */
+header{position:fixed;inset:0 0 auto 0;z-index:100;background:var(--carbon);color:#fff;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.header-inner{max-width:880px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .title{font-size:16px;font-weight:700}
+.brand .subtitle{font-size:12px;opacity:.8}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+.top-actions .chip{background:#202324;border:1px solid #2f3336;border-radius:999px;padding:6px 10px;color:#cbd5e1;font-size:12px;cursor:pointer}
+.top-actions .chip.active{background:var(--brand);border-color:var(--brand);color:#fff}
+/* Contenu sous header */
+main{padding-top:64px}
+.container{max-width:880px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:16px;margin:16px 0}
+.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:700px){.grid-2{grid-template-columns:1fr 1fr}}
+label{font-size:13px;display:block}
+input,select,textarea{width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #cbd5e1;font-size:16px;background:#fff}
+textarea{resize:vertical;min-height:90px}
+.btn{border-radius:12px;padding:10px 14px;border:1px solid #e2e8f0;background:#fff;font-size:14px;cursor:pointer}
+.btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+.btn-primary:hover{background:var(--brand-dark)}
+.file-label{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid #e2e8f0;background:#f1f5f9;font-size:14px;cursor:pointer}
+.file-input{display:none}
+.badge{background:#eef2ff;border:1px solid #c7d2fe;border-radius:999px;padding:4px 8px;font-size:12px}
+.muted{color:var(--muted);font-size:12px}
+.section-title{font-size:16px;font-weight:700;margin-bottom:6px}
+.center{display:flex;justify-content:center;align-items:center}
+.kpi{display:flex;gap:8px;flex-wrap:wrap}
+.kpi .pill{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:10px;padding:6px 10px;font-size:12px}
+/* Boutons d'action avec icônes */
+.btn-action{display:inline-flex;align-items:center;gap:8px;background:#f1f5f9;color:#0f172a;border:1px solid #e2e8f0;padding:10px 14px;border-radius:12px;text-decoration:none;font-size:14px;font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.05);transition:all .15s ease}
+.btn-action:hover{background:#e2e8f0}
+.btn-action .ic{width:18px;height:18px;fill:var(--brand-dark);display:inline-block}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));background:#0f172a;color:#fff;padding:8px 12px;border-radius:10px;font-size:13px;box-shadow:var(--shadow);z-index:999}
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);display:none;align-items:flex-end;z-index:200}
+.sheet{background:#fff;border-top-left-radius:16px;border-top-right-radius:16px;max-height:85vh;overflow:auto;width:100%;padding:12px}
+.item{padding:10px;border:1px solid #e2e8f0;border-radius:12px;margin:8px 0}
+.searchbar{display:flex;gap:8px;margin-bottom:8px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
+
+<!-- HEADER FIXE -->
 <header>
-  <div class="container row">
-    <div class="row" style="gap:12px">
-      <!-- Place ton logo ici si tu veux en base64 ou <img src="logo.png"> -->
+  <div class="header-inner">
+    <div class="brand">
       <div>
-        <div style="font-size:18px;font-weight:600">Echome Prospection PV</div>
-        <div class="muted">R1 (prospection) & R2 (qualification) • iOS</div>
+        <div class="title">Echome Prospection PV</div>
+        <div class="subtitle">R1 • R2 • iOS / PWA</div>
       </div>
+    </div>
+    <div class="top-actions">
+      <div class="chip" data-nav="home">Accueil</div>
+      <div class="chip" data-nav="r1">R1</div>
+      <div class="chip" data-nav="r2">R2</div>
+      <div class="chip" data-nav="todo">À relancer</div>
+      <div class="chip" id="chipSync">Synchroniser</div>
     </div>
   </div>
 </header>
 
-<main class="container">
-  <div class="card">
-    <div class="row">
-      <div>
-        <b>Base Excel</b>
-        <div class="muted">Charger / Nouvelle • Enregistrer R1/R2 • Télécharger (puis Remplacer dans Fichiers/OneDrive)</div>
-      </div>
-      <div class="row" style="gap:8px">
-        <label class="file-label"><input id="fileInput" type="file" accept=".xlsx" class="file-input">Charger</label>
-        <button id="btnNew" class="btn">Nouvelle</button>
-        <button id="btnSave" class="btn btn-primary">Télécharger XLSX</button>
-      </div>
-    </div>
-    <div class="row" style="margin-top:6px">
-      <div id="status" class="muted">Aucune base chargée.</div>
-      <div id="rowsInfo" class="badge">R1:0 • R2:0</div>
-    </div>
-  </div>
+<main>
+  <div class="container">
 
-  <div class="tabs">
-    <button id="tabR1" class="tab active">R1 – Prospection / Suivi</button>
-    <button id="tabR2" class="tab">R2 – Qualification technique</button>
-  </div>
+    <!-- ACCUEIL -->
+    <section id="view-home" class="card">
+      <div class="section-title">Bienvenue</div>
+      <div class="muted">Authentifie-toi, choisis la base XLSX, puis accède à R1/R2.</div>
 
-  <!-- R1 -->
-  <form id="formR1" class="card">
-    <div class="row" style="gap:8px;justify-content:flex-end;margin-bottom:6px">
-      <button type="button" id="btnNewClient" class="btn">Nouveau client (R1)</button>
-      <button type="button" id="btnFindR1" class="btn">Rechercher R1</button>
-    </div>
-    <div class="grid grid-2">
-      <div><label>Date R1</label><input type="date" id="r1_date"></div>
-      <div>
-        <label>Prospect ID <span class="muted">(ex: P-20251030-1234)</span></label>
-        <div class="row" style="gap:8px">
-          <input type="text" id="r1_id" placeholder="P-aaaammjj-####">
-          <button type="button" id="btnGenId" class="btn">Générer</button>
+      <div class="card">
+        <div class="section-title">Authentification</div>
+        <div class="grid grid-2">
+          <div>
+            <label>Code PIN (4–6 chiffres)</label>
+            <input id="pin" type="password" inputmode="numeric" placeholder="••••">
+          </div>
+          <div class="center">
+            <button class="btn" id="btnSetPin">Définir/MAJ</button>
+            <button class="btn btn-primary" id="btnLogin">Entrer</button>
+          </div>
+        </div>
+        <div class="muted">Le PIN est stocké localement (offline).</div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Base de données</div>
+        <div class="row">
+          <label class="file-label"><input id="fileInput" type="file" accept=".xlsx" class="file-input">Charger (XLSX)</label>
+          <button class="btn" id="btnNew">Nouvelle</button>
+          <button class="btn btn-primary" id="btnSync">Synchroniser (export/partage)</button>
+          <button class="btn" id="btnFree">Libérer la base</button>
+        </div>
+        <div class="row" style="margin-top:6px">
+          <div id="status" class="muted">Aucune base chargée.</div>
+          <div id="rowsInfo" class="badge">R1:0 • R2:0</div>
         </div>
       </div>
-      <div><label>Nom / Prénom</label><input type="text" id="r1_nom"></div>
-      <div><label>Téléphone</label><input type="tel" id="r1_tel"></div>
-      <div><label>E-mail</label><input type="text" id="r1_email"></div>
-      <div><label>Intervenant interne</label><input type="text" id="r1_intervenant"></div>
-      <div><label>Raison sociale</label><input type="text" id="r1_rs"></div>
-    </div>
 
-    <div class="grid grid-2" style="margin-top:8px">
-      <div><label>Adresse</label><input type="text" id="r1_adresse" placeholder="N°, Rue…"></div>
-      <div><label>Code Postal</label><input type="text" id="r1_cp"></div>
-      <div><label>Commune</label><input type="text" id="r1_commune"></div>
-      <div>
-        <label>🧭 Géolocalisation</label>
-        <div class="row" style="gap:8px">
-          <select id="geo_mode">
-            <option value="commune">Commune</option>
-            <option value="commune_cp">Commune + CP</option>
-            <option value="full">Adresse complète</option>
+      <div class="card">
+        <div class="section-title">Accès rapide</div>
+        <div class="row">
+          <button class="btn btn-primary" data-goto="r1">R1 – Prospection / Suivi</button>
+          <button class="btn" data-goto="r2">R2 – Qualification technique</button>
+          <button class="btn" data-goto="todo">À relancer</button>
+        </div>
+        <div class="kpi" style="margin-top:10px">
+          <div class="pill">Aujourd’hui: <span id="kpi-today">0</span> fiches</div>
+          <div class="pill">Relances à faire: <span id="kpi-relances">0</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- R1 -->
+    <section id="view-r1" class="card" style="display:none">
+      <div class="row" style="justify-content:space-between">
+        <div class="section-title">R1 – Prospection / Suivi</div>
+        <div class="row">
+          <button class="btn" id="btnNewClient">Nouveau client</button>
+          <button class="btn" id="btnFindR1">Rechercher R1</button>
+          <button class="btn btn-primary" id="btnSyncR1">Synchroniser</button>
+          <button class="btn" id="btnMailR1">Exporter (mail/Trello)</button>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <div><label>Date R1</label><input type="date" id="r1_date"></div>
+        <div>
+          <label>Prospect ID <span class="muted">(ex: P-20251030-1234)</span></label>
+          <div class="row">
+            <input type="text" id="r1_id" placeholder="P-aaaammjj-####">
+            <button type="button" id="btnGenId" class="btn">Générer</button>
+          </div>
+        </div>
+        <div><label>Nom / Prénom</label><input type="text" id="r1_nom"></div>
+        <div><label>Téléphone</label><input type="tel" id="r1_tel"></div>
+        <div><label>E-mail</label><input type="text" id="r1_email"></div>
+
+        <!-- Boutons d'action avec icônes (Material-like) -->
+        <div class="row" style="gap:8px; margin-top:8px">
+          <a class="btn-action" id="btnCall" href="#" title="Appeler">
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1v3.5a1 1 0 01-1 1C11.07 21.01 2.99 12.93 2.99 3.99a1 1 0 011-1H7.5a1 1 0 011 1c0 1.24.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.2 2.21z"/>
+            </svg>
+            Appeler
+          </a>
+
+          <a class="btn-action" id="btnEmail" href="#" title="Envoyer un e-mail">
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+            Email
+          </a>
+        </div>
+
+        <div><label>Intervenant interne</label><input type="text" id="r1_intervenant"></div>
+        <div><label>Raison sociale</label><input type="text" id="r1_rs"></div>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:8px">
+        <div><label>Adresse</label><input type="text" id="r1_adresse" placeholder="N°, Rue…"></div>
+        <div><label>Code Postal</label><input type="text" id="r1_cp"></div>
+        <div><label>Commune</label><input type="text" id="r1_commune"></div>
+        <div>
+          <label>🧭 Géolocalisation</label>
+          <div class="row">
+            <select id="geo_mode"><option value="commune">Commune</option><option value="commune_cp">Commune + CP</option><option value="full">Adresse complète</option></select>
+            <button type="button" id="btnGeo" class="btn">📍 Localiser</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:8px">
+        <div><label>Intérêt</label>
+          <select id="r1_interet">
+            <option value="">—</option><option>Pas intéressé</option><option>Faible</option><option>Moyen</option><option>Fort</option>
           </select>
-          <button type="button" id="btnGeo" class="btn">📍 Localiser</button>
+        </div>
+        <div><label>Délai projet</label>
+          <select id="r1_delai">
+            <option value="">—</option><option>Immédiat</option><option>≤ 3 mois</option>
+            <option>3–6 mois</option><option>> 6 mois</option><option>À définir</option><option>Sans objet</option>
+          </select>
+        </div>
+        <div><label>Relance – Date</label><input type="date" id="r1_relance_date"></div>
+        <div><label>Relance – Statut</label>
+          <select id="r1_relance_statut">
+            <option>À faire</option><option>Fait</option><option>Reporté</option><option>Ne pas relancer</option><option>RDV planifié</option>
+          </select>
+        </div>
+        <div><label>Statut prospection</label>
+          <select id="r1_statut">
+            <option value="">—</option><option>Nouveau</option><option>À contacter</option><option>Contacté</option>
+            <option>Relance</option><option>Demande Étude Solaire</option><option>Refusé / Non intéressé</option>
+          </select>
+        </div>
+        <div style="grid-column:1/-1"><label>Notes</label><textarea id="r1_notes"></textarea></div>
+      </div>
+
+      <div class="row" style="justify-content:space-between;margin-top:8px">
+        <label style="display:flex;gap:8px;align-items:center">
+          <input type="checkbox" id="upd_r1"> Mettre à jour si ID existe
+        </label>
+        <button type="button" id="btnSaveR1" class="btn btn-primary">Enregistrer R1 → Excel</button>
+      </div>
+    </section>
+
+    <!-- R2 -->
+    <section id="view-r2" class="card" style="display:none">
+      <div class="row" style="justify-content:space-between">
+        <div class="section-title">R2 – Qualification technique</div>
+        <div class="row">
+          <div class="searchbar" style="flex:1;min-width:260px">
+            <input id="r2_search" type="text" placeholder="Rechercher Prospect ID / Nom / Tel / Commune">
+            <button type="button" id="btnPickFromR1" class="btn">Reprendre depuis R1</button>
+          </div>
+          <button class="btn btn-primary" id="btnSyncR2">Synchroniser</button>
+          <button class="btn" id="btnMailR2">Exporter (mail/Trello)</button>
         </div>
       </div>
-    </div>
 
-    <div class="grid grid-2" style="margin-top:8px">
-      <div><label>Intérêt</label><select id="r1_interet"><option value="">—</option><option>Faible</option><option>Moyen</option><option>Fort</option></select></div>
-      <div><label>Délai projet</label><select id="r1_delai"><option value="">—</option><option>Immédiat</option><option>≤ 3 mois</option><option>3–6 mois</option><option>> 6 mois</option><option>À définir</option></select></div>
-      <div><label>Relance – Date</label><input type="date" id="r1_relance_date"></div>
-      <div><label>Relance – Statut</label><select id="r1_relance_statut"><option>À faire</option><option>Fait</option><option>Reporté</option></select></div>
-      <div style="grid-column:1/-1"><label>Notes</label><textarea id="r1_notes"></textarea></div>
-    </div>
+      <div class="grid grid-2">
+        <div><label>Date R2</label><input type="date" id="r2_date"></div>
+        <div><label>Prospect ID (même que R1)</label><input type="text" id="r2_id" placeholder="P-aaaammjj-####"></div>
 
-    <div style="text-align:right;margin-top:8px">
-      <button type="button" id="btnSaveR1" class="btn btn-primary">Enregistrer R1 → Excel</button>
-    </div>
-  </form>
+        <div><label>Type toiture</label>
+          <select id="r2_toiture">
+            <option value="">—</option><option>Tuiles mécaniques</option><option>Tuiles canal</option>
+            <option>Ardoise</option><option>Bac acier</option>
+            <option>Toit terrasse bitume</option><option>Toit terrasse EPDM</option>
+            <option>Fibrociment</option><option>Autre</option>
+          </select>
+        </div>
+        <div><label>Nb panneaux + implantation</label><input type="text" id="r2_pv_nb"></div>
+        <div><label>Type de réseau</label>
+          <select id="r2_reseau"><option value="">—</option><option>Monophasé</option><option>Triphasé</option></select>
+        </div>
+        <div><label>Longueur dispo (m)</label><input type="number" id="r2_L" inputmode="decimal"></div>
+        <div><label>Largeur dispo (m)</label><input type="number" id="r2_l" inputmode="decimal"></div>
+        <div><label>Pente toit (°)</label><input type="number" id="r2_pente" inputmode="decimal"></div>
+        <div><label>Orientation</label>
+          <select id="r2_orientation">
+            <option value="">—</option><option>N</option><option>NE</option><option>E</option><option>SE</option>
+            <option>S</option><option>SO</option><option>O</option><option>NO</option>
+          </select>
+        </div>
 
-  <!-- R2 -->
-  <form id="formR2" class="card" style="display:none">
-    <div class="row" style="gap:8px;justify-content:flex-end;margin-bottom:6px">
-      <div class="searchbar" style="flex:1;min-width:240px">
-        <input id="r2_search" type="text" placeholder="Rechercher Prospect ID / Nom / Tel / Commune">
-        <button type="button" id="btnPickFromR1" class="btn">Reprendre depuis R1</button>
+        <div><label>Facture EDF demandée</label><select id="r2_facture_dem"><option>Non</option><option>Oui</option></select></div>
+        <div><label>Type chauffage</label>
+          <select id="r2_chauff">
+            <option value="">—</option><option>Électrique</option><option>Gaz</option><option>Fioul</option>
+            <option>Bois</option><option>PAC air/air</option><option>PAC air/eau</option>
+          </select>
+        </div>
+        <div><label>Nb personnes</label><input type="number" id="r2_nbpers" inputmode="numeric"></div>
+        <div><label>Profil présence</label>
+          <select id="r2_presence"><option value="">—</option><option>Toute la journée</option><option>Matin midi soir</option><option>Matin et soir</option></select>
+        </div>
+        <div><label>Surface habitable (m²)</label><input type="number" id="r2_surface" inputmode="numeric"></div>
+        <div><label>Niveau d'isolation</label>
+          <select id="r2_isolation"><option value="">—</option><option>Peu isolé</option><option>Isolé</option><option>Bien isolé</option></select>
+        </div>
+        <div><label>Type ECS</label>
+          <select id="r2_ecs"><option value="">—</option><option>Cumulus électrique</option><option>Thermodynamique</option><option>Gaz</option><option>Fioul</option><option>Solaire</option><option>PAC double service</option></select>
+        </div>
+        <div><label>Climatisation</label><select id="r2_clim"><option>Non</option><option>Oui</option></select></div>
+        <div><label>Piscine</label><select id="r2_piscine"><option>Non</option><option>Hors sol</option><option>Enterrée</option></select></div>
+
+        <div><label>Véhicule électrique</label><select id="r2_ve"><option value="">—</option><option>Non</option><option>Oui</option></select></div>
+        <div><label>Modèle véhicule électrique</label><input type="text" id="r2_ve_modele"></div>
+        <div><label>Km annuels</label><input type="number" id="r2_km" inputmode="numeric"></div>
+        <div><label>Recharges/sem domicile</label><input type="number" id="r2_rech_dom" inputmode="numeric"></div>
+        <div><label>Recharges/sem bureau</label><input type="number" id="r2_rech_bureau" inputmode="numeric"></div>
+        <div><label>Devis borne recharge</label><select id="r2_borne"><option value="">—</option><option>Non</option><option>Oui</option></select></div>
+
+        <div><label>N° PDL <span class="muted">(identifie précisément le point de livraison — clé en collectif)</span></label><input type="text" id="r2_pdl" placeholder="Ex : 14 chiffres"></div>
+        <div><label>Linky</label><select id="r2_linky"><option>Non</option><option>Oui</option></select></div>
+        <div><label>Photos prises</label><select id="r2_photos"><option>Non</option><option>Oui</option></select></div>
+
+        <div style="grid-column:1/-1"><label>Notes complémentaires</label><textarea id="r2_notes"></textarea></div>
       </div>
-    </div>
 
-    <div class="grid grid-2">
-      <div><label>Date R2</label><input type="date" id="r2_date"></div>
-      <div><label>Prospect ID (même que R1)</label><input type="text" id="r2_id" placeholder="P-aaaammjj-####"></div>
+      <div class="row" style="justify-content:space-between;margin-top:8px">
+        <label style="display:flex;gap:8px;align-items:center">
+          <input type="checkbox" id="upd_r2"> Mettre à jour si ID existe
+        </label>
+        <button type="button" id="btnSaveR2" class="btn btn-primary">Enregistrer R2 → Excel</button>
+      </div>
+    </section>
 
-      <div><label>Type toiture</label><input type="text" id="r2_toiture"></div>
-      <div><label>Nb panneaux + implantation</label><input type="text" id="r2_pv_nb"></div>
-      <div><label>Type de réseau</label><select id="r2_reseau"><option value="">—</option><option>Monophasé</option><option>Triphasé</option></select></div>
-      <div><label>Longueur dispo (m)</label><input type="number" id="r2_L" inputmode="decimal"></div>
-      <div><label>Largeur dispo (m)</label><input type="number" id="r2_l" inputmode="decimal"></div>
-      <div><label>Pente toit (°)</label><input type="number" id="r2_pente" inputmode="decimal"></div>
-      <div><label>Facture EDF demandée</label><select id="r2_facture_dem"><option>Non</option><option>Oui</option></select></div>
+    <!-- À RELANCER -->
+    <section id="view-todo" class="card" style="display:none">
+      <div class="section-title">Leads à relancer aujourd’hui</div>
+      <div class="searchbar"><input id="todo_q" placeholder="Rechercher…"><button class="btn" id="todo_refresh">Actualiser</button></div>
+      <div id="todo_list"></div>
+    </section>
 
-      <div><label>Type chauffage</label><input type="text" id="r2_chauff"></div>
-      <div><label>Nb personnes</label><input type="number" id="r2_nbpers" inputmode="numeric"></div>
-      <div><label>Profil présence</label><select id="r2_presence"><option value="">—</option><option>Toute la journée</option><option>Matin midi soir</option><option>Matin et soir</option></select></div>
-      <div><label>Surface habitable (m²)</label><input type="number" id="r2_surface" inputmode="numeric"></div>
-      <div><label>Niveau d'isolation</label><select id="r2_isolation"><option value="">—</option><option>Peu isolé</option><option>Isolé</option><option>Bien isolé</option></select></div>
-      <div><label>Type ECS</label><input type="text" id="r2_ecs"></div>
-      <div><label>Climatisation</label><select id="r2_clim"><option>Non</option><option>Oui</option></select></div>
-      <div><label>Piscine</label><select id="r2_piscine"><option>Non</option><option>Hors sol</option><option>Enterrée</option></select></div>
-
-      <div><label>Présence VE</label><select id="r2_ve"><option value="">—</option><option>Non</option><option>Oui</option></select></div>
-      <div><label>Modèle VE</label><input type="text" id="r2_ve_modele"></div>
-      <div><label>Km annuels</label><input type="number" id="r2_km" inputmode="numeric"></div>
-      <div><label>Recharges/sem domicile</label><input type="number" id="r2_rech_dom" inputmode="numeric"></div>
-      <div><label>Recharges/sem bureau</label><input type="number" id="r2_rech_bureau" inputmode="numeric"></div>
-      <div><label>Devis borne recharge</label><select id="r2_borne"><option value="">—</option><option>Non</option><option>Oui</option></select></div>
-
-      <div style="grid-column:1/-1"><label>Notes complémentaires</label><textarea id="r2_notes"></textarea></div>
-    </div>
-
-    <div style="text-align:right;margin-top:8px">
-      <button type="button" id="btnSaveR2" class="btn btn-primary">Enregistrer R2 → Excel</button>
-    </div>
-  </form>
+  </div>
 </main>
 
 <!-- Overlay Finder R1 -->
@@ -189,107 +328,218 @@
 </div>
 
 <script>
-/* Tabs */
-const tabR1=document.getElementById('tabR1'),tabR2=document.getElementById('tabR2');
-const formR1=document.getElementById('formR1'),formR2=document.getElementById('formR2');
-tabR1.onclick=()=>{tabR1.classList.add('active');tabR2.classList.remove('active');formR1.style.display='block';formR2.style.display='none';};
-tabR2.onclick=()=>{tabR2.classList.add('active');tabR1.classList.remove('active');formR2.style.display='block';formR1.style.display='none';};
+/* ======== PARAM ======== */
+const TRELLO_EMAIL = "contact79114603+oee5zfegror5sses2lez@boards.trello.com";
 
-/* Excel */
-let wb=null;const SHEET_R1='R1_MOBILE',SHEET_R2='R2_MOBILE';
+/* ======== NAV ======== */
+const chips=[...document.querySelectorAll('.top-actions .chip')];
+function setActive(nav){
+  chips.forEach(c=>c.classList.toggle('active', c.dataset.nav===nav));
+  document.getElementById('view-home').style.display = (nav==='home')?'block':'none';
+  document.getElementById('view-r1').style.display   = (nav==='r1')?'block':'none';
+  document.getElementById('view-r2').style.display   = (nav==='r2')?'block':'none';
+  document.getElementById('view-todo').style.display = (nav==='todo')?'block':'none';
+  if(nav==='r1') prepR1Dates();
+  if(nav==='r2') prepR2Dates();
+  if(nav==='todo') renderTodo();
+}
+chips.forEach(c=>c.addEventListener('click',()=>{ const nav=c.dataset.nav; if(nav) setActive(nav); }));
+document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{ setActive(b.dataset.goto); });
+
+/* ======== AUTH ======== */
+const PIN_KEY='echome_pin';
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1600);}
+function getPin(){return localStorage.getItem(PIN_KEY)||'';}
+document.getElementById('btnSetPin').onclick=()=>{
+  const v=document.getElementById('pin').value.trim();
+  if(!/^[0-9]{4,6}$/.test(v)){ toast('PIN invalide (4–6 chiffres)'); return; }
+  localStorage.setItem(PIN_KEY, v); toast('PIN enregistré');
+};
+document.getElementById('btnLogin').onclick=()=>{
+  const v=document.getElementById('pin').value.trim(), s=getPin();
+  if(!s){ toast('Définis d’abord un PIN'); return; }
+  if(v!==s){ toast('PIN incorrect'); return; }
+  toast('Connecté'); setActive('home');
+};
+
+/* ======== EXCEL STATE ======== */
+let wb=null; const SHEET_R1='R1_MOBILE', SHEET_R2='R2_MOBILE';
 function statusMsg(m){document.getElementById('status').textContent=m;}
 function setRowsInfo(){
-  if(!wb){document.getElementById('rowsInfo').textContent='R1:0 • R2:0';return;}
+  if(!wb){document.getElementById('rowsInfo').textContent='R1:0 • R2:0'; return;}
   const r1=XLSX.utils.sheet_to_json(wb.Sheets[SHEET_R1]||{}, {header:1});
   const r2=XLSX.utils.sheet_to_json(wb.Sheets[SHEET_R2]||{}, {header:1});
-  const n1=Math.max(0,(r1.length||0)-1),n2=Math.max(0,(r2.length||0)-1);
+  const n1=Math.max(0,(r1.length||0)-1), n2=Math.max(0,(r2.length||0)-1);
   document.getElementById('rowsInfo').textContent=`R1:${n1} • R2:${n2}`;
+  // KPIs rapides
+  const today=new Date().toISOString().slice(0,10);
+  let tcount=0, rel=0;
+  if(r1.length>1){
+    const idxDate=r1[0].indexOf('Date R1'), idxRelDate=r1[0].indexOf('Relance date'), idxRelStat=r1[0].indexOf('Relance statut');
+    for(let i=1;i<r1.length;i++){
+      if(r1[i][idxDate]===today) tcount++;
+      const rdate=(r1[i][idxRelDate]||''); const rstat=(r1[i][idxRelStat]||'');
+      if(rdate && rdate<=today && (rstat==='À faire'||!rstat)) rel++;
+    }
+  }
+  document.getElementById('kpi-today').textContent=tcount;
+  document.getElementById('kpi-relances').textContent=rel;
 }
 function newWB(){
   wb=XLSX.utils.book_new();
-  const r1H=["Date R1","Prospect ID","Nom/Prénom","Téléphone","E-mail","Intervenant interne","Raison sociale","Adresse","CP","Commune","Intérêt","Délai projet","Relance date","Relance statut","Notes"];
-  const r2H=["Date R2","Prospect ID","Type toiture","Nb panneaux + implantation","Type réseau","Longueur (m)","Largeur (m)","Pente (°)","Facture EDF demandée","Type chauffage","Nb personnes","Profil présence","Surface habitable (m²)","Niveau d'isolation","Type ECS","Climatisation","Piscine","VE","VE modèle","Km annuels","Rech/sem domicile","Rech/sem bureau","Devis borne recharge","Notes"];
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([r1H]),SHEET_R1);
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([r2H]),SHEET_R2);
-  statusMsg("Nouvelle base prête.");setRowsInfo();
+  const r1H=["Date R1","Prospect ID","Nom/Prénom","Téléphone","E-mail","Intervenant interne","Raison sociale","Adresse","CP","Commune","Intérêt","Délai projet","Relance date","Relance statut","Statut prospection","Notes"];
+  const r2H=["Date R2","Prospect ID","Type toiture","Nb panneaux + implantation","Type réseau","Longueur (m)","Largeur (m)","Pente (°)","Orientation","Facture EDF demandée","Type chauffage","Nb personnes","Profil présence","Surface habitable (m²)","Niveau d'isolation","Type ECS","Climatisation","Piscine","Véhicule électrique","Modèle véhicule électrique","Km annuels","Rech/sem domicile","Rech/sem bureau","Devis borne recharge","N° PDL","Notes","Linky","Photos prises"];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([r1H]), SHEET_R1);
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([r2H]), SHEET_R2);
+  statusMsg("Nouvelle base prête."); setRowsInfo();
 }
 function loadFile(file){
   const r=new FileReader();
-  r.onload=e=>{const data=new Uint8Array(e.target.result);wb=XLSX.read(data,{type:'array'});statusMsg("Base chargée : "+file.name);setRowsInfo();};
+  r.onload=e=>{ const data=new Uint8Array(e.target.result); wb=XLSX.read(data,{type:'array'}); statusMsg("Base chargée : "+file.name); setRowsInfo(); toast('Base chargée'); };
   r.readAsArrayBuffer(file);
 }
+function wbToBlob(){ const wbout=XLSX.write(wb||XLSX.utils.book_new(),{bookType:'xlsx',type:'array'}); return new Blob([wbout],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}); }
 function downloadWB(){
   if(!wb) newWB();
-  const blob=new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array'})],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='Prospection_PV.xlsx';a.click();URL.revokeObjectURL(url);
+  const blob=wbToBlob(); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='Prospection_PV.xlsx'; a.click(); URL.revokeObjectURL(url);
 }
-document.getElementById('fileInput').onchange=(e)=>{const f=e.target.files?.[0];if(f) loadFile(f);};
+async function shareWB(){
+  if(!wb) newWB();
+  const blob=wbToBlob(); const file=new File([blob],'Prospection_PV.xlsx',{type:blob.type});
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    await navigator.share({files:[file], title:'Prospection PV', text:'Base R1/R2 Echome'});
+  }else{
+    downloadWB();
+  }
+}
+function freeWB(){
+  wb = null;
+  statusMsg("Base libérée de la mémoire.");
+  setRowsInfo();
+  document.querySelectorAll('input, textarea, select').forEach(el=>{
+    if(el.id.startsWith('r1_') || el.id.startsWith('r2_')) el.value = '';
+  });
+}
+document.getElementById('fileInput').onchange=(e)=>{const f=e.target.files?.[0]; if(f) loadFile(f);};
 document.getElementById('btnNew').onclick=newWB;
-document.getElementById('btnSave').onclick=downloadWB;
+document.getElementById('btnSync').onclick=shareWB;
+document.getElementById('chipSync').onclick=shareWB;
+document.getElementById('btnFree').onclick=freeWB;
 
-/* Helpers */
-function todayISO(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-document.getElementById('r1_date').value=todayISO();document.getElementById('r2_date').value=todayISO();
-document.getElementById('btnGenId').onclick=()=>{const d=new Date(),rnd=Math.floor(1000+Math.random()*9000);document.getElementById('r1_id').value=`P-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${rnd}`;};
-document.getElementById('btnNewClient').onclick=()=>{ // clear R1 and generate new ID
+/* ======== SHORTCUTS ======== */
+function todayISO(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function prepR1Dates(){ document.getElementById('r1_date').value=todayISO(); }
+function prepR2Dates(){ document.getElementById('r2_date').value=todayISO(); }
+document.addEventListener('DOMContentLoaded',()=>{setActive('home'); prepR1Dates(); prepR2Dates();});
+
+/* ======== COMMON ======== */
+function req(obj,fields){ const miss=fields.filter(f=>!obj[f]||String(obj[f]).trim()===''); if(miss.length){ toast("Champs requis: "+miss.join(", ")); return false; } return true; }
+function upsertRow(sheetName, headers, rec, keyField, doUpdate){
+  const ws = wb.Sheets[sheetName];
+  let rows = XLSX.utils.sheet_to_json(ws, {header:1});
+  if(rows.length===0) rows = [headers];
+  const idx = rows.findIndex((r,i)=> i>0 && r[headers.indexOf(keyField)]===rec[keyField]);
+  const row = headers.map(k => rec[k] ?? '');
+  if (doUpdate && idx>0) rows[idx] = row; else rows.push(row);
+  wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet(rows);
+  setRowsInfo();
+}
+
+/* ======== R1 ======== */
+document.getElementById('btnGenId').onclick=()=>{ const d=new Date(), rnd=Math.floor(1000+Math.random()*9000); document.getElementById('r1_id').value=`P-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${rnd}`; };
+document.getElementById('btnNewClient').onclick=()=>{
   ['r1_nom','r1_tel','r1_email','r1_intervenant','r1_rs','r1_adresse','r1_cp','r1_commune','r1_notes'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('r1_interet').value='';document.getElementById('r1_delai').value='';document.getElementById('r1_relance_date').value='';document.getElementById('r1_relance_statut').value='À faire';
-  document.getElementById('r1_date').value=todayISO();document.getElementById('btnGenId').click();document.getElementById('r1_nom').focus();
+  document.getElementById('r1_interet').value=''; document.getElementById('r1_delai').value=''; document.getElementById('r1_relance_date').value=''; document.getElementById('r1_relance_statut').value='À faire'; document.getElementById('r1_statut').value='';
+  document.getElementById('r1_date').value=todayISO(); document.getElementById('btnGenId').click(); document.getElementById('r1_nom').focus();
 };
+function updateQuickActions(){
+  const tel = (document.getElementById('r1_tel').value||'').replace(/\s+/g,'');
+  const mail = (document.getElementById('r1_email').value||'').trim();
+  document.getElementById('btnCall').href = tel ? `tel:${tel}` : '#';
+  document.getElementById('btnEmail').href = mail ? `mailto:${mail}` : '#';
+}
+['r1_tel','r1_email'].forEach(id=>{document.getElementById(id).addEventListener('input', updateQuickActions);}); updateQuickActions();
 
-/* Toast */
-function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1500);}
-
-/* Géoloc + reverse geocode (OSM) */
 async function reverseGeocode(lat,lon){
   const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`,{headers:{'Accept':'application/json'}});
   if(!res.ok) throw new Error('Geocoding error'); return res.json();
 }
 document.getElementById('btnGeo').onclick=()=>{
   const mode=document.getElementById('geo_mode').value;
-  if(!navigator.geolocation){toast('Géoloc non supportée');return;}
+  if(!navigator.geolocation){ toast('Géoloc non supportée'); return; }
   navigator.geolocation.getCurrentPosition(async pos=>{
     try{
-      const {latitude,longitude}=pos.coords;const data=await reverseGeocode(latitude,longitude);
-      const a=data.address||{};
-      const commune=a.city||a.town||a.village||a.municipality||'';
-      const cp=a.postcode||'';
+      const {latitude,longitude}=pos.coords; const data=await reverseGeocode(latitude,longitude);
+      const a=data.address||{}; const commune=a.city||a.town||a.village||a.municipality||''; const cp=a.postcode||'';
       const addrLine=[a.house_number,a.road,a.suburb,a.hamlet].filter(Boolean).join(' ');
       if(mode==='commune'){ r1_commune.value=commune; }
       else if(mode==='commune_cp'){ r1_commune.value=commune; r1_cp.value=cp; }
       else { r1_commune.value=commune; r1_cp.value=cp; r1_adresse.value=addrLine || (data.display_name||''); }
       toast('Position capturée');
-    }catch(e){toast('Échec géocodage');}
+    }catch(e){ toast('Échec géocodage'); }
   },()=>toast('Géoloc refusée'));
 };
 
-/* Save R1 */
-function req(obj,fields){const miss=fields.filter(f=>!obj[f]||String(obj[f]).trim()==='');if(miss.length){toast("Champs requis: "+miss.join(", "));return false;}return true;}
 document.getElementById('btnSaveR1').onclick=()=>{
   if(!wb) newWB();
-  const H=["Date R1","Prospect ID","Nom/Prénom","Téléphone","E-mail","Intervenant interne","Raison sociale","Adresse","CP","Commune","Intérêt","Délai projet","Relance date","Relance statut","Notes"];
-  const rec={"Date R1":r1_date.value||'',"Prospect ID":r1_id.value.trim(),"Nom/Prénom":r1_nom.value.trim(),"Téléphone":r1_tel.value.trim(),"E-mail":r1_email.value.trim(),"Intervenant interne":r1_intervenant.value.trim(),"Raison sociale":r1_rs.value.trim(),"Adresse":r1_adresse.value.trim(),"CP":r1_cp.value.trim(),"Commune":r1_commune.value.trim(),"Intérêt":r1_interet.value,"Délai projet":r1_delai.value,"Relance date":r1_relance_date.value||'',"Relance statut":r1_relance_statut.value,"Notes":r1_notes.value.trim()};
+  const H=["Date R1","Prospect ID","Nom/Prénom","Téléphone","E-mail","Intervenant interne","Raison sociale","Adresse","CP","Commune","Intérêt","Délai projet","Relance date","Relance statut","Statut prospection","Notes"];
+  const rec={"Date R1":r1_date.value||'',"Prospect ID":r1_id.value.trim(),"Nom/Prénom":r1_nom.value.trim(),"Téléphone":r1_tel.value.trim(),"E-mail":r1_email.value.trim(),"Intervenant interne":r1_intervenant.value.trim(),"Raison sociale":r1_rs.value.trim(),"Adresse":r1_adresse.value.trim(),"CP":r1_cp.value.trim(),"Commune":r1_commune.value.trim(),"Intérêt":r1_interet.value,"Délai projet":r1_delai.value,"Relance date":r1_relance_date.value||'',"Relance statut":r1_relance_statut.value,"Statut prospection":r1_statut.value,"Notes":r1_notes.value.trim()};
   if(!req(rec,["Prospect ID","Nom/Prénom","Téléphone"])) return;
-  const ws=wb.Sheets[SHEET_R1];const data=XLSX.utils.sheet_to_json(ws,{header:1});if(data.length===0) data.push(H);
-  data.push(H.map(k=>rec[k]??''));wb.Sheets[SHEET_R1]=XLSX.utils.aoa_to_sheet(data);setRowsInfo();toast("R1 enregistré");
+  upsertRow(SHEET_R1, H, rec, "Prospect ID", document.getElementById('upd_r1').checked);
+  toast(document.getElementById('upd_r1').checked? "R1 mis à jour" : "R1 enregistré");
 };
 
-/* Save R2 */
+/* ======== R2 ======== */
 document.getElementById('btnSaveR2').onclick=()=>{
   if(!wb) newWB();
-  const H=["Date R2","Prospect ID","Type toiture","Nb panneaux + implantation","Type réseau","Longueur (m)","Largeur (m)","Pente (°)","Facture EDF demandée","Type chauffage","Nb personnes","Profil présence","Surface habitable (m²)","Niveau d'isolation","Type ECS","Climatisation","Piscine","VE","VE modèle","Km annuels","Rech/sem domicile","Rech/sem bureau","Devis borne recharge","Notes"];
-  const rec={"Date R2":r2_date.value||'',"Prospect ID":r2_id.value.trim(),"Type toiture":r2_toiture.value.trim(),"Nb panneaux + implantation":r2_pv_nb.value.trim(),"Type réseau":r2_reseau.value,"Longueur (m)":r2_L.value||'',"Largeur (m)":r2_l.value||'',"Pente (°)":r2_pente.value||'',"Facture EDF demandée":r2_facture_dem.value,"Type chauffage":r2_chauff.value.trim(),"Nb personnes":r2_nbpers.value||'',"Profil présence":r2_presence.value,"Surface habitable (m²)":r2_surface.value||'',"Niveau d'isolation":r2_isolation.value,"Type ECS":r2_ecs.value.trim(),"Climatisation":r2_clim.value,"Piscine":r2_piscine.value,"VE":r2_ve.value,"VE modèle":r2_ve_modele.value.trim(),"Km annuels":r2_km.value||'',"Rech/sem domicile":r2_rech_dom.value||'',"Rech/sem bureau":r2_rech_bureau.value||'',"Devis borne recharge":r2_borne.value,"Notes":r2_notes.value.trim()};
+  const H=["Date R2","Prospect ID","Type toiture","Nb panneaux + implantation","Type réseau","Longueur (m)","Largeur (m)","Pente (°)","Orientation","Facture EDF demandée","Type chauffage","Nb personnes","Profil présence","Surface habitable (m²)","Niveau d'isolation","Type ECS","Climatisation","Piscine","Véhicule électrique","Modèle véhicule électrique","Km annuels","Rech/sem domicile","Rech/sem bureau","Devis borne recharge","N° PDL","Notes","Linky","Photos prises"];
+  const rec={"Date R2":r2_date.value||'',"Prospect ID":r2_id.value.trim(),"Type toiture":r2_toiture.value,"Nb panneaux + implantation":r2_pv_nb.value.trim(),"Type réseau":r2_reseau.value,"Longueur (m)":r2_L.value||'',"Largeur (m)":r2_l.value||'',"Pente (°)":r2_pente.value||'',"Orientation":r2_orientation?.value||'',"Facture EDF demandée":r2_facture_dem.value,"Type chauffage":r2_chauff.value,"Nb personnes":r2_nbpers.value||'',"Profil présence":r2_presence.value,"Surface habitable (m²)":r2_surface.value||'',"Niveau d'isolation":r2_isolation.value,"Type ECS":r2_ecs.value,"Climatisation":r2_clim.value,"Piscine":r2_piscine.value,"Véhicule électrique":r2_ve.value,"Modèle véhicule électrique":r2_ve_modele.value.trim(),"Km annuels":r2_km.value||'',"Rech/sem domicile":r2_rech_dom.value||'',"Rech/sem bureau":r2_rech_bureau.value||'',"Devis borne recharge":r2_borne.value,"N° PDL":r2_pdl.value.trim(),"Notes":r2_notes.value.trim(),"Linky":r2_linky?.value||'',"Photos prises":r2_photos?.value||''};
   if(!req(rec,["Prospect ID"])) return;
-  const ws=wb.Sheets[SHEET_R2];const data=XLSX.utils.sheet_to_json(ws,{header:1});if(data.length===0) data.push(H);
-  data.push(H.map(k=>rec[k]??''));wb.Sheets[SHEET_R2]=XLSX.utils.aoa_to_sheet(data);setRowsInfo();toast("R2 enregistré");
+  upsertRow(SHEET_R2, H, rec, "Prospect ID", document.getElementById('upd_r2').checked);
+  toast(document.getElementById('upd_r2').checked? "R2 mis à jour" : "R2 enregistré");
 };
 
-/* Overlay Finder (R1) */
+/* ======== EXPORT MAIL / TRELLO ======== */
+function mailSummaryR1(){
+  const ws = wb?.Sheets[SHEET_R1]; if(!ws){toast('Pas de base chargée');return;}
+  const rows = XLSX.utils.sheet_to_json(ws); if(!rows.length){toast('Aucune fiche');return;}
+  const o = rows[rows.length-1];
+  const lines = [];
+  lines.push(`Prospect ID: ${o["Prospect ID"]||''}`);
+  lines.push(`Nom: ${o["Nom/Prénom"]||''}`);
+  lines.push(`Tel: ${o["Téléphone"]||''}  Email: ${o["E-mail"]||''}`);
+  lines.push(`Adresse: ${o["Adresse"]||''}, ${o["CP"]||''} ${o["Commune"]||''}`);
+  lines.push(`Intérêt: ${o["Intérêt"]||''}  Délai: ${o["Délai projet"]||''}`);
+  lines.push(`Relance: ${o["Relance date"]||''} / ${o["Relance statut"]||''}`);
+  lines.push(`Statut prospection: ${o["Statut prospection"]||''}`);
+  lines.push(`Notes: ${o["Notes"]||''}`);
+  const body = encodeURIComponent(lines.join('\n'));
+  const to = (TRELLO_EMAIL && TRELLO_EMAIL.includes('@')) ? TRELLO_EMAIL : '';
+  location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent('Prospect PV '+(o["Prospect ID"]||''))}&body=${body}`;
+}
+function mailSummaryR2(){
+  const ws = wb?.Sheets[SHEET_R2]; if(!ws){toast('Pas de base chargée');return;}
+  const rows = XLSX.utils.sheet_to_json(ws); if(!rows.length){toast('Aucune fiche');return;}
+  const o = rows[rows.length-1];
+  const keys=["Prospect ID","Type toiture","Nb panneaux + implantation","Type réseau","Longueur (m)","Largeur (m)","Pente (°)","Orientation","Type chauffage","Type ECS","Véhicule électrique","Modèle véhicule électrique","Km annuels","Rech/sem domicile","Rech/sem bureau","Devis borne recharge","N° PDL","Notes"];
+  const lines = keys.map(k=>`${k}: ${o[k]||''}`);
+  const body = encodeURIComponent(lines.join('\n'));
+  const to = (TRELLO_EMAIL && TRELLO_EMAIL.includes('@')) ? TRELLO_EMAIL : '';
+  location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent('Qualification PV '+(o["Prospect ID"]||''))}&body=${body}`;
+}
+document.getElementById('btnMailR1').onclick = mailSummaryR1;
+document.getElementById('btnMailR2').onclick = mailSummaryR2;
+
+/* ======== SYNC SHORTCUTS ======== */
+document.getElementById('btnSyncR1').onclick=shareWB;
+document.getElementById('btnSyncR2').onclick=shareWB;
+
+/* ======== FINDER R1 ======== */
 const overlay=document.getElementById('overlay'),resultsEl=document.getElementById('results');
-document.getElementById('btnFindR1').onclick=()=>{if(!wb) newWB();overlay.style.display='flex';resultsEl.innerHTML='';document.getElementById('q').value='';};
+document.getElementById('btnFindR1').onclick=()=>{ if(!wb) newWB(); overlay.style.display='flex'; resultsEl.innerHTML=''; document.getElementById('q').value=''; };
 document.getElementById('btnCloseOverlay').onclick=()=>overlay.style.display='none';
 document.getElementById('btnSearch').onclick=()=>searchR1();
-document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();searchR1();}});
+document.getElementById('q').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); searchR1(); } });
 
 function getR1Objects(){
   if(!wb) return [];
@@ -339,23 +589,57 @@ function copyToR1(o){
   r1_delai.value=o["Délai projet"]||'';
   r1_relance_date.value=o["Relance date"]||'';
   r1_relance_statut.value=o["Relance statut"]||'À faire';
+  r1_statut.value=o["Statut prospection"]||'';
   r1_notes.value=o["Notes"]||'';
   overlay.style.display='none';
+  updateQuickActions();
   toast('Fiche R1 chargée');
 }
 function prefillR2(o){
-  tabR2.click();
+  setActive('r2');
   r2_id.value=o["Prospect ID"]||'';
   const ident=`[Identité] ${o["Nom/Prénom"]||''} • ${o["Téléphone"]||''} • ${o["E-mail"]||''}`;
-  if(!r2_notes.value.includes(ident)) r2_notes.value=(r2_notes.value? r2_notes.value+'\\n' : '')+ident;
+  if(!r2_notes.value.includes(ident)) r2_notes.value=(r2_notes.value? r2_notes.value+'\n' : '')+ident;
   toast('Prospect R1 repris en R2');
 }
-
-/* R2 quick pick */
 document.getElementById('btnPickFromR1').onclick=()=>{
   const q=document.getElementById('r2_search').value.trim().toLowerCase();
-  overlay.style.display='flex';document.getElementById('q').value=q;searchR1();
+  overlay.style.display='flex'; document.getElementById('q').value=q; searchR1();
 };
+
+/* ======== TODO VIEW ======== */
+function renderTodo(){
+  const box=document.getElementById('todo_list'); box.innerHTML='';
+  if(!wb){box.innerHTML='<div class="muted">Charge une base.</div>'; return;}
+  const rows=XLSX.utils.sheet_to_json(wb.Sheets[SHEET_R1]||{}, {header:1});
+  if(rows.length<2){box.innerHTML='<div class="muted">Aucune fiche.</div>'; return;}
+  const H=rows[0], idxDate=H.indexOf('Relance date'), idxStat=H.indexOf('Relance statut');
+  const today=new Date().toISOString().slice(0,10);
+  const q=(document.getElementById('todo_q').value||'').toLowerCase();
+  const list=rows.slice(1).filter(r=>{
+    const date=(r[idxDate]||''); const stat=(r[idxStat]||'');
+    const hay=(r.join(' ')||'').toLowerCase();
+    const due = date && date <= today && (stat==='À faire');
+    const match = !q || hay.includes(q);
+    return due && match;
+  });
+  if(!list.length){box.innerHTML='<div class="muted">Rien à relancer aujourd’hui.</div>'; return;}
+  box.innerHTML=list.map(r=>{
+    const o={}; H.forEach((h,i)=>o[h]=r[i]??'');
+    const payload=btoa(unescape(encodeURIComponent(JSON.stringify(o))));
+    return `<div class="item">
+      <div style="font-weight:600">${o["Nom/Prénom"]||"(Sans nom)"} <span class="muted">(${o["Prospect ID"]||"-"})</span></div>
+      <div class="muted">${o["Relance date"]||""} • ${o["Téléphone"]||""} • ${o["Commune"]||""}</div>
+      <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+        <a class="btn" href="tel:${o["Téléphone"]||""}">Appeler</a>
+        <button class="btn" onclick='copyToR1_b64("${payload}"); setActive("r1");'>Ouvrir R1</button>
+        <button class="btn btn-primary" onclick='prefillR2_b64("${payload}")'>Pré-remplir R2</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+document.getElementById('todo_refresh').onclick=renderTodo;
+document.getElementById('todo_q').addEventListener('input', renderTodo);
 </script>
 </body>
 </html>
