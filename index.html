@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#1C1C1C"/>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Echome Prospection PV</title>
+<title>Echome Prospection PV v1.0.4</title>
 <style>
 :root{
   --brand:#37C3AF;--brand-dark:#2ea898;--carbon:#1C1C1C;
@@ -617,9 +617,11 @@ function copyToR1(o){
 }
 function prefillR2(o){
   setActive('r2');
-  r2_id.value=o["Prospect ID"]||';
-  const ident=`[Identité] ${o["Nom/Prénom"]||''} • ${o["Téléphone"]||''} • ${o["E-mail"]||''}`;
-  if(!r2_notes.value.includes(ident)) r2_notes.value=(r2_notes.value? r2_notes.value+'\n' : '')+ident;
+  r2_id.value = (o["Prospect ID"] || '');
+  const ident = `[Identité] ${o["Nom/Prénom"]||''} • ${o["Téléphone"]||''} • ${o["E-mail"]||''}`;
+  if(!r2_notes.value.includes(ident)) {
+    r2_notes.value = (r2_notes.value ? r2_notes.value + '\n' : '') + ident;
+  }
   toast('Prospect R1 repris en R2');
 }
 document.getElementById('btnPickFromR1').onclick=()=>{
