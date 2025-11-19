@@ -100,6 +100,8 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:12px 0}
       <button class="btn" id="btnImport">Importer</button>
       <input id="fileInput" type="file" accept=".xlsx,.csv" style="display:none">
       <button class="btn" id="btnExport">Exporter (XLSX)</button>
+      <!-- Optionnel : sync depuis le cloud (LIST) -->
+      <!-- <button class="btn" id="btnCloudPull">Sync Cloud → Local</button> -->
       <button class="btn primary" id="btnAddTop">+ Ajouter</button>
     </div>
   </div>
@@ -309,6 +311,51 @@ let DB = load();
 function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
 function save(){ localStorage.setItem(KEY, JSON.stringify(DB)); }
 
+// ===== CLOUD SYNC (Google Apps Script) =====
+// À adapter avec ton URL de WebApp et ta clé
+const CLOUD_ENABLED = true; // passe à false si tu veux désactiver
+const API_URL = "https://script.google.com/macros/s/XXXXXXXXXXXX/exec"; // TODO: remplacer par ton URL
+const API_KEY = "A_CHANGER_PAR_UN_SECRET_LONG"; // TODO: même valeur que dans Apps Script
+
+async function syncUpsertToCloud(p){
+  if(!CLOUD_ENABLED) return;
+  try{
+    await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        apiKey: API_KEY,
+        action: "UPSERT",
+        payload: p
+      })
+    });
+  }catch(e){
+    console.error("Sync cloud UPSERT KO", e);
+  }
+}
+
+// (optionnel) si plus tard tu veux recharger depuis le cloud
+// async function syncFromCloud(){
+//   if(!CLOUD_ENABLED) return;
+//   try{
+//     const resp = await fetch(API_URL, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ apiKey: API_KEY, action: "LIST", payload: {} })
+//     });
+//     const data = await resp.json();
+//     if(data.ok && Array.isArray(data.items)){
+//       DB = data.items.map(row => ({
+//         ...row,
+//         // si besoin, mapping spécifique des colonnes Sheets -> structure locale
+//       }));
+//       save(); renderList(); toast('Base locale mise à jour depuis le cloud');
+//     }
+//   }catch(e){
+//     console.error("Sync cloud LIST KO", e);
+//   }
+// }
+
 // ===== Utils =====
 const $ = id => document.getElementById(id);
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1600);}
@@ -414,7 +461,7 @@ function openRead(id){
   $('aMail').href = mailLink(p.email, `Prospect ${p.id||''}`);
   $('aMaps').href = mapsLink(`${p.adresse||''} ${p.cp||''} ${p.commune||''}`, p.lat, p.lon);
   $('btnEdit').onclick=()=>openEdit(p);
-  $('btnFollow').onclick=()=>{ p.relance_date = addDays(todayISO(),7); p.relance_statut='À faire'; save(); toast('Relance planifiée J+7'); openRead(p.id); };
+  $('btnFollow').onclick=()=>{ p.relance_date = addDays(todayISO(),7); p.relance_statut='À faire'; save(); syncUpsertToCloud(p); toast('Relance planifiée J+7'); openRead(p.id); };
 
   overlay.style.display='flex';
 }
@@ -572,7 +619,10 @@ function submitEdit(){
   promotePipeline(p);
   const idx = DB.findIndex(x=>x.id===p.id);
   if(idx>=0) DB[idx]=p; else DB.push(p);
-  save(); renderList(); toast(editIsNew?'Prospect ajouté':'Prospect mis à jour'); openRead(p.id);
+  save();
+  // sync cloud
+  syncUpsertToCloud(p);
+  renderList(); toast(editIsNew?'Prospect ajouté':'Prospect mis à jour'); openRead(p.id);
 }
 $('btnSubmit').onclick=submitEdit;
 
