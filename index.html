@@ -9,6 +9,7 @@
 <title>Echome Prospection PV — v2 Offline Enrichie</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
 <style>
 :root{
   --brand:#37C3AF; --brand-dark:#2ea898; --carbon:#1C1C1C;
@@ -100,8 +101,6 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:12px 0}
       <button class="btn" id="btnImport">Importer</button>
       <input id="fileInput" type="file" accept=".xlsx,.csv" style="display:none">
       <button class="btn" id="btnExport">Exporter (XLSX)</button>
-      <!-- Optionnel : sync depuis le cloud (LIST) -->
-      <!-- <button class="btn" id="btnCloudPull">Sync Cloud → Local</button> -->
       <button class="btn primary" id="btnAddTop">+ Ajouter</button>
     </div>
   </div>
@@ -112,8 +111,7 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:12px 0}
     <div class="card">
       <div class="tabs" id="tabs">
         <div class="tab active" data-seg="">Tous</div>
-        <div class="tab" data-seg="ACC_Vercors">ACC Vercors</div>
-        <div class="tab" data-seg="ACC_SaintQuentin">ACC Saint-Quentin</div>
+        <div class="tab" data-seg="ACC">ACC</div>
         <div class="tab" data-seg="PV_Residentiel">PV Résidentiel</div>
         <div class="tab" data-seg="PV_Professionnel">PV Pro</div>
       </div>
@@ -129,10 +127,15 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:12px 0}
           <option>ACC – Étude de potentiel</option><option>ACC – Convention ACC</option>
           <option>ACC – Contrats/Raccordement</option><option>ACC – Mise en service</option>
         </select>
-        <select id="fCanal" class="input" style="width:180px">
+        <select id="fCanal" class="input" style="width:150px">
           <option value="">Canal : Tous</option>
           <option>Terrain</option><option>Inbound</option><option>Référencement</option>
           <option>Parrainage</option><option>Partenaire</option><option>Événement</option>
+        </select>
+        <select id="fAccProjet" class="input" style="width:220px">
+          <option value="">Projet ACC : Tous</option>
+          <option>FAAC des Espinasses</option>
+          <option>CPV la Galandrine</option>
         </select>
         <button class="btn" id="fRelanceToday">À relancer (aujourd’hui)</button>
         <button class="btn" id="btnModeVisite">Mode Visite</button>
@@ -187,11 +190,17 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:12px 0}
           <div style="flex:1 1 180px"><label>Date</label><input id="f_date" class="input" type="date"></div>
           <div style="flex:1 1 220px"><label>Segment</label>
             <select id="f_segment" class="input">
-              <option>ACC_Vercors</option><option>ACC_SaintQuentin</option><option>PV_Residentiel</option><option>PV_Professionnel</option>
+              <option>ACC</option>
+              <option>PV_Residentiel</option>
+              <option>PV_Professionnel</option>
             </select>
           </div>
           <div style="flex:1 1 200px"><label>Marché</label>
-            <select id="f_marche" class="input"><option>PV Individuel</option><option>PV Tertiaire</option><option>ACC (Collectif)</option></select>
+            <select id="f_marche" class="input">
+              <option>PV Individuel</option>
+              <option>PV Tertiaire</option>
+              <option>ACC (Collectif)</option>
+            </select>
           </div>
         </div>
         <hr>
@@ -209,20 +218,31 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:12px 0}
         </div>
         <div class="row" style="gap:12px;margin-top:8px">
           <div style="flex:1 1 200px"><label>Canal</label>
-            <select id="f_canal" class="input"><option>Terrain</option><option>Inbound</option><option>Référencement</option><option>Parrainage</option><option>Partenaire</option><option>Événement</option></select>
+            <select id="f_canal" class="input">
+              <option>Terrain</option><option>Inbound</option><option>Référencement</option>
+              <option>Parrainage</option><option>Partenaire</option><option>Événement</option>
+            </select>
           </div>
           <div style="flex:1 1 260px"><label>Pipeline</label><select id="f_pipeline" class="input"></select></div>
           <div style="flex:1 1 200px"><label>Relance – Date</label><input id="f_relance_date" class="input" type="date"></div>
           <div style="flex:1 1 200px"><label>Relance – Statut</label>
-            <select id="f_relance_statut" class="input"><option>À faire</option><option>Fait</option><option>Reporté</option><option>Ne pas relancer</option><option>RDV planifié</option></select>
+            <select id="f_relance_statut" class="input">
+              <option>À faire</option><option>Fait</option><option>Reporté</option><option>Ne pas relancer</option><option>RDV planifié</option>
+            </select>
           </div>
         </div>
 
         <div id="accBlock" class="card" style="display:none; margin-top:12px">
           <div class="section-title">Infos ACC</div>
           <div class="row" style="gap:12px">
+            <div style="flex:1 1 260px">
+              <label>Projet ACC</label>
+              <input id="f_acc_projet" class="input" placeholder="Ex : FAAC des Espinasses">
+            </div>
             <div style="flex:1 1 220px"><label>Type collectif</label>
-              <select id="f_acc_type" class="input"><option>Copropriété</option><option>Lotissement</option><option>Parc social</option><option>Autre</option></select>
+              <select id="f_acc_type" class="input">
+                <option>Copropriété</option><option>Lotissement</option><option>Parc social</option><option>Autre</option>
+              </select>
             </div>
             <div style="flex:1 1 140px"><label>Nb logements</label><input id="f_acc_logts" class="input" inputmode="numeric"></div>
             <div style="flex:1 1 200px"><label>Conso annuelle (MWh)</label><input id="f_acc_conso" class="input" inputmode="decimal"></div>
@@ -230,7 +250,9 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:12px 0}
           </div>
           <div class="row" style="gap:12px;margin-top:8px">
             <div style="flex:1 1 260px"><label>Contact gestionnaire</label><input id="f_acc_contact" class="input"></div>
-            <div style="flex:1 1 160px"><label>PMO</label><select id="f_acc_pmo" class="input"><option>Non</option><option>Oui</option></select></div>
+            <div style="flex:1 1 160px"><label>PMO</label>
+              <select id="f_acc_pmo" class="input"><option>Non</option><option>Oui</option></select>
+            </div>
           </div>
         </div>
 
@@ -239,14 +261,19 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:12px 0}
           <div class="row" style="gap:12px">
             <div style="flex:1 1 220px"><label>Type de toiture</label>
               <select id="f_r2_toiture" class="input">
-                <option>Tuiles mécaniques</option><option>Tuiles canal</option><option>Ardoise</option><option>Bac acier</option><option>Fibrociment</option><option>Plate/ETANCHE</option>
+                <option>Tuiles mécaniques</option><option>Tuiles canal</option><option>Ardoise</option>
+                <option>Bac acier</option><option>Fibrociment</option><option>Plate/ETANCHE</option>
               </select>
             </div>
-            <div style="flex:1 1 200px"><label>Réseau</label><select id="f_r2_reseau" class="input"><option>Monophasé</option><option>Triphasé</option></select></div>
+            <div style="flex:1 1 200px"><label>Réseau</label>
+              <select id="f_r2_reseau" class="input"><option>Monophasé</option><option>Triphasé</option></select>
+            </div>
             <div style="flex:1 1 260px"><label>N° PDL</label><input id="f_r2_pdl" class="input" placeholder="14 chiffres"></div>
           </div>
           <div class="row" style="gap:12px;margin-top:8px">
-            <div style="flex:1 1 220px"><label>ECS</label><select id="f_r2_ecs" class="input"><option>Électrique</option><option>Gaz</option><option>PAC</option><option>Autre</option></select></div>
+            <div style="flex:1 1 220px"><label>ECS</label>
+              <select id="f_r2_ecs" class="input"><option>Électrique</option><option>Gaz</option><option>PAC</option><option>Autre</option></select>
+            </div>
             <div style="flex:1 1 240px"><label>Véhicule Électrique (modèle)</label><input id="f_r2_ve_modele" class="input" placeholder="Citadine / Berline / SUV"></div>
             <div style="flex:1 1 160px"><label>Km/an VE</label><input id="f_r2_ve_km" class="input" inputmode="numeric"></div>
             <div style="flex:1 1 240px"><label>Recharges/semaine (domicile/bureau)</label><input id="f_r2_ve_recharges" class="input" placeholder="ex. 3 domicile / 1 bureau"></div>
@@ -259,7 +286,9 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:12px 0}
             <div style="flex:1 1 200px"><label>Date visite</label><input id="f_cr_date" type="date" class="input"></div>
             <div style="flex:1 1 160px"><label>Durée (min)</label><input id="f_cr_duree" class="input" inputmode="numeric"></div>
             <div style="flex:1 1 220px"><label>Next step</label>
-              <select id="f_cr_next" class="input"><option>Relance</option><option>Envoyer doc</option><option>Devis</option><option>Visite technique</option><option>Attente</option></select>
+              <select id="f_cr_next" class="input">
+                <option>Relance</option><option>Envoyer doc</option><option>Devis</option><option>Visite technique</option><option>Attente</option>
+              </select>
             </div>
           </div>
           <div style="margin-top:8px"><label>Commentaires</label><textarea id="f_cr_notes" class="input" placeholder="Résumé, objections, timing…"></textarea></div>
@@ -311,51 +340,6 @@ let DB = load();
 function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
 function save(){ localStorage.setItem(KEY, JSON.stringify(DB)); }
 
-// ===== CLOUD SYNC (Google Apps Script) =====
-// À adapter avec ton URL de WebApp et ta clé
-const CLOUD_ENABLED = true; // passe à false si tu veux désactiver
-const API_URL = "https://script.google.com/macros/s/XXXXXXXXXXXX/exec"; // TODO: remplacer par ton URL
-const API_KEY = "A_CHANGER_PAR_UN_SECRET_LONG"; // TODO: même valeur que dans Apps Script
-
-async function syncUpsertToCloud(p){
-  if(!CLOUD_ENABLED) return;
-  try{
-    await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        apiKey: API_KEY,
-        action: "UPSERT",
-        payload: p
-      })
-    });
-  }catch(e){
-    console.error("Sync cloud UPSERT KO", e);
-  }
-}
-
-// (optionnel) si plus tard tu veux recharger depuis le cloud
-// async function syncFromCloud(){
-//   if(!CLOUD_ENABLED) return;
-//   try{
-//     const resp = await fetch(API_URL, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ apiKey: API_KEY, action: "LIST", payload: {} })
-//     });
-//     const data = await resp.json();
-//     if(data.ok && Array.isArray(data.items)){
-//       DB = data.items.map(row => ({
-//         ...row,
-//         // si besoin, mapping spécifique des colonnes Sheets -> structure locale
-//       }));
-//       save(); renderList(); toast('Base locale mise à jour depuis le cloud');
-//     }
-//   }catch(e){
-//     console.error("Sync cloud LIST KO", e);
-//   }
-// }
-
 // ===== Utils =====
 const $ = id => document.getElementById(id);
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1600);}
@@ -373,42 +357,86 @@ const PIPE_ACC = ["ACC – Repérage","ACC – Mobilisation","ACC – Réunion c
 function fillPipelineOptions(selectEl, marche){ const opts = (marche==="ACC (Collectif)") ? PIPE_ACC : PIPE_PV; selectEl.innerHTML = opts.map(o=>`<option>${o}</option>`).join(''); }
 
 // ===== Liste & Filtres =====
-const listEl = $('list'); const qEl = $('q'); const fPipe = $('fPipeline'); const fCanal = $('fCanal'); const tabsEl = $('tabs');
-let filterRelanceToday=false; let filterSegment="";
-$('fRelanceToday').onclick=()=>{ filterRelanceToday=!filterRelanceToday; renderList(); };
-tabsEl.querySelectorAll('.tab').forEach(tab=>tab.onclick=()=>{ tabsEl.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); tab.classList.add('active'); filterSegment = tab.dataset.seg||""; renderList(); });
+const listEl = $('list');
+const qEl = $('q');
+const fPipe = $('fPipeline');
+const fCanal = $('fCanal');
+const tabsEl = $('tabs');
+const fAccProjet = $('fAccProjet');
+
+let filterRelanceToday=false;
+let filterSegment="";
+
+$('fRelanceToday').onclick=()=>{ filterRelanceToday=!filterRelanceToday; toast(filterRelanceToday?'Filtre : relances du jour':'Filtre relances désactivé'); renderList(); };
+
+tabsEl.querySelectorAll('.tab').forEach(tab=>tab.onclick=()=>{
+  tabsEl.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  filterSegment = tab.dataset.seg||"";
+  renderList();
+});
+
 $('btnModeVisite').onclick=()=>{ document.body.dataset.mode='visite'; toast('Mode Visite : R1 + CR'); };
 $('btnModeTechnique').onclick=()=>{ document.body.dataset.mode='technique'; toast('Mode Technique : R2'); };
 
 function renderList(){
-  const q=(qEl.value||'').toLowerCase(); const pipe=fPipe.value||''; const canal=fCanal.value||'';
+  const q=(qEl.value||'').toLowerCase();
+  const pipe=fPipe.value||'';
+  const canal=fCanal.value||'';
+  const accProjet = fAccProjet ? (fAccProjet.value||'') : '';
+
   const rows = DB.filter(p=>{
     if(filterSegment && p.segment!==filterSegment) return false;
     if(pipe && p.pipeline!==pipe) return false;
     if(canal && p.canal!==canal) return false;
+
+    // Filtre projet ACC uniquement si segment ACC
+    if(filterSegment === 'ACC' && accProjet && (p.acc_projet||'') !== accProjet) return false;
+
     if(filterRelanceToday && p.relance_date!==todayISO()) return false;
     if(!q) return true;
-    const hay=[p.id,p.nom,p.tel,p.email,p.commune,p.segment].join(' ').toLowerCase();
+    const hay=[p.id,p.nom,p.tel,p.email,p.commune,p.segment,p.acc_projet].join(' ').toLowerCase();
     return hay.includes(q);
   }).sort((a,b)=> (b.date||'').localeCompare(a.date||''));
+
   $('statCount').textContent = `${rows.length} prospect${rows.length>1?'s':''}`;
-  const today=todayISO(); $('statToday').textContent = rows.filter(p=>p.date===today).length;
-  if(!rows.length){ listEl.innerHTML = `<div class="muted">Aucun prospect. Utilise “+ Ajouter”.</div>`; return; }
+  const today=todayISO();
+  $('statToday').textContent = rows.filter(p=>p.date===today).length;
+
+  if(!rows.length){
+    listEl.innerHTML = `<div class="muted">Aucun prospect. Utilise “+ Ajouter”.</div>`;
+    return;
+  }
+
   listEl.innerHTML = rows.map(p=>`
     <div class="item" onclick='openRead("${p.id}")'>
       <div class="avatar">${(p.nom||'?').trim().slice(0,2).toUpperCase()}</div>
       <div class="meta">
-        <div class="name">${escapeHtml(p.nom||'(Sans nom)')} <span class="muted">• ${escapeHtml(p.segment||'')}</span> <span class="muted">• ${p.id||''}</span></div>
+        <div class="name">
+          ${escapeHtml(p.nom||'(Sans nom)')}
+          <span class="muted">• ${escapeHtml(p.segment||'')}</span>
+          <span class="muted">• ${p.id||''}</span>
+        </div>
         <div class="line">${escapeHtml(p.commune||'')} ${p.cp?('('+p.cp+')'):''} • ${escapeHtml(p.tel||'')}</div>
-        <div class="line">${escapeHtml(p.marche||'')} · ${escapeHtml(p.pipeline||'N/A')} · ${escapeHtml(p.canal||'')}</div>
+        <div class="line">
+          ${escapeHtml(p.marche||'')} · ${escapeHtml(p.pipeline||'N/A')} · ${escapeHtml(p.canal||'')}
+          ${p.segment === 'ACC' && p.acc_projet ? ' · '+escapeHtml(p.acc_projet) : ''}
+        </div>
       </div>
     </div>
   `).join('');
 }
+
 [qEl,fPipe,fCanal].forEach(el=>el.addEventListener('input',renderList));
+if (fAccProjet) { fAccProjet.addEventListener('change', renderList); }
 
 // ===== Overlay & Fiche =====
-const overlay = $('overlay'); const readView = $('view-read'); const editView = $('view-edit'); const readContent = $('readContent'); const sheetTitle = $('sheetTitle'); const synthKpis = $('synthKpis');
+const overlay = $('overlay');
+const readView = $('view-read');
+const editView = $('view-edit');
+const readContent = $('readContent');
+const sheetTitle = $('sheetTitle');
+const synthKpis = $('synthKpis');
 $('btnCloseSheet').onclick=()=>overlay.style.display='none';
 
 function completeness(p){
@@ -440,6 +468,7 @@ function openRead(id){
     <hr>
     ${acc?`
       <div><strong>Infos ACC</strong></div>
+      <div class="muted">Projet : ${escapeHtml(p.acc_projet||'')}</div>
       <div class="muted">Type: ${escapeHtml(p.acc_type||'')} • Logts: ${escapeHtml(p.acc_logts||'')}</div>
       <div class="muted">Conso: ${escapeHtml(p.acc_conso||'')} MWh • Toiture: ${escapeHtml(p.acc_toit||'')} m² • PMO: ${escapeHtml(p.acc_pmo||'')}</div>
       <div class="muted">Contact gestionnaire: ${escapeHtml(p.acc_contact||'')}</div>
@@ -461,7 +490,7 @@ function openRead(id){
   $('aMail').href = mailLink(p.email, `Prospect ${p.id||''}`);
   $('aMaps').href = mapsLink(`${p.adresse||''} ${p.cp||''} ${p.commune||''}`, p.lat, p.lon);
   $('btnEdit').onclick=()=>openEdit(p);
-  $('btnFollow').onclick=()=>{ p.relance_date = addDays(todayISO(),7); p.relance_statut='À faire'; save(); syncUpsertToCloud(p); toast('Relance planifiée J+7'); openRead(p.id); };
+  $('btnFollow').onclick=()=>{ p.relance_date = addDays(todayISO(),7); p.relance_statut='À faire'; save(); toast('Relance planifiée J+7'); openRead(p.id); };
 
   overlay.style.display='flex';
 }
@@ -471,8 +500,20 @@ function renderGallery(p){
   return `<div class="gallery">${imgs}</div>`;
 }
 
-function openAdd(){ const p = { id: genId(), date: todayISO(), segment: filterSegment||'PV_Residentiel', marche:'PV Individuel', canal:'Terrain', relance_statut:'À faire', pipeline: PIPE_PV[0] }; openEdit(p, true); }
-$('btnAdd').onclick=openAdd; $('btnAddTop').onclick=openAdd;
+function openAdd(){
+  const p = {
+    id: genId(),
+    date: todayISO(),
+    segment: filterSegment || 'PV_Residentiel',
+    marche:'PV Individuel',
+    canal:'Terrain',
+    relance_statut:'À faire',
+    pipeline: PIPE_PV[0]
+  };
+  openEdit(p, true);
+}
+$('btnAdd').onclick=openAdd;
+$('btnAddTop').onclick=openAdd;
 
 // ===== Édition =====
 const f = {
@@ -481,37 +522,65 @@ const f = {
   adresse:$('f_adresse'), cp:$('f_cp'), commune:$('f_commune'),
   lat:$('f_lat'), lon:$('f_lon'), canal:$('f_canal'),
   pipeline:$('f_pipeline'), relance_date:$('f_relance_date'), relance_statut:$('f_relance_statut'),
+  acc_projet:$('f_acc_projet'),
   acc_type:$('f_acc_type'), acc_logts:$('f_acc_logts'), acc_conso:$('f_acc_conso'), acc_toit:$('f_acc_toit'),
   acc_contact:$('f_acc_contact'), acc_pmo:$('f_acc_pmo'),
   r2_toiture:$('f_r2_toiture'), r2_reseau:$('f_r2_reseau'), r2_pdl:$('f_r2_pdl'),
   r2_ecs:$('f_r2_ecs'), r2_ve_modele:$('f_r2_ve_modele'), r2_ve_km:$('f_r2_ve_km'), r2_ve_recharges:$('f_r2_ve_recharges'),
   cr_date:$('f_cr_date'), cr_duree:$('f_cr_duree'), cr_next:$('f_cr_next'), cr_notes:$('f_cr_notes'), cr_photos:$('f_cr_photos'),
   notes:$('f_notes')
-}; let editIsNew=false;
+};
+let editIsNew=false;
 
 function v(el,val){el.value = (val??'');}
 function openEdit(p, isNew=false){
   editIsNew=isNew;
   $('sheetTitle').textContent = isNew ? "Nouveau prospect" : "Modifier le prospect";
-  $('view-read').classList.add('hidden'); $('view-edit').classList.remove('hidden'); overlay.style.display='flex';
+  $('view-read').classList.add('hidden');
+  $('view-edit').classList.remove('hidden');
+  overlay.style.display='flex';
 
-  v(f.id,p.id); v(f.date,p.date||todayISO()); v(f.segment,p.segment||'PV_Residentiel');
-  v(f.marche,p.marche||'PV Individuel'); fillPipelineOptions(f.pipeline, f.marche.value); v(f.pipeline, p.pipeline || f.pipeline.options[0]?.value || '');
-  v(f.nom,p.nom); v(f.tel,p.tel); v(f.email,p.email);
-  v(f.adresse,p.adresse); v(f.cp,p.cp); v(f.commune,p.commune);
-  v(f.lat,p.lat); v(f.lon,p.lon); v(f.canal,p.canal||'Terrain');
-  v(f.relance_date,p.relance_date); v(f.relance_statut,p.relance_statut||'À faire');
+  v(f.id,p.id);
+  v(f.date,p.date||todayISO());
+  v(f.segment,p.segment||'PV_Residentiel');
+  v(f.marche,p.marche||'PV Individuel');
+  fillPipelineOptions(f.pipeline, f.marche.value);
+  v(f.pipeline, p.pipeline || f.pipeline.options[0]?.value || '');
+
+  v(f.nom,p.nom);
+  v(f.tel,p.tel);
+  v(f.email,p.email);
+  v(f.adresse,p.adresse);
+  v(f.cp,p.cp);
+  v(f.commune,p.commune);
+  v(f.lat,p.lat);
+  v(f.lon,p.lon);
+  v(f.canal,p.canal||'Terrain');
+  v(f.relance_date,p.relance_date);
+  v(f.relance_statut,p.relance_statut||'À faire');
 
   const isACC = (f.marche.value==="ACC (Collectif)");
   $('accBlock').style.display = isACC ? 'block' : 'none';
-  v(f.acc_type,p.acc_type||'Copropriété'); v(f.acc_logts,p.acc_logts); v(f.acc_conso,p.acc_conso); v(f.acc_toit,p.acc_toit);
-  v(f.acc_contact,p.acc_contact); v(f.acc_pmo,p.acc_pmo||'Non');
+  v(f.acc_projet,p.acc_projet||'');
+  v(f.acc_type,p.acc_type||'Copropriété');
+  v(f.acc_logts,p.acc_logts);
+  v(f.acc_conso,p.acc_conso);
+  v(f.acc_toit,p.acc_toit);
+  v(f.acc_contact,p.acc_contact);
+  v(f.acc_pmo,p.acc_pmo||'Non');
 
-  v(f.r2_toiture,p.r2_toiture||'Tuiles mécaniques'); v(f.r2_reseau,p.r2_reseau||'Monophasé');
-  v(f.r2_pdl,p.r2_pdl); v(f.r2_ecs,p.r2_ecs||'Électrique'); v(f.r2_ve_modele,p.r2_ve_modele);
-  v(f.r2_ve_km,p.r2_ve_km); v(f.r2_ve_recharges,p.r2_ve_recharges);
+  v(f.r2_toiture,p.r2_toiture||'Tuiles mécaniques');
+  v(f.r2_reseau,p.r2_reseau||'Monophasé');
+  v(f.r2_pdl,p.r2_pdl);
+  v(f.r2_ecs,p.r2_ecs||'Électrique');
+  v(f.r2_ve_modele,p.r2_ve_modele);
+  v(f.r2_ve_km,p.r2_ve_km);
+  v(f.r2_ve_recharges,p.r2_ve_recharges);
 
-  v(f.cr_date,p.cr_date||todayISO()); v(f.cr_duree,p.cr_duree); v(f.cr_next,p.cr_next||'Relance'); v(f.cr_notes,p.cr_notes);
+  v(f.cr_date,p.cr_date||todayISO());
+  v(f.cr_duree,p.cr_duree);
+  v(f.cr_next,p.cr_next||'Relance');
+  v(f.cr_notes,p.cr_notes);
   renderCRGallery(p.cr_photos||[]);
 
   f.marche.onchange = ()=>{
@@ -519,8 +588,12 @@ function openEdit(p, isNew=false){
     f.pipeline.value = (f.marche.value==="ACC (Collectif)") ? PIPE_ACC[0] : PIPE_PV[0];
     $('accBlock').style.display = (f.marche.value==="ACC (Collectif)") ? 'block' : 'none';
   };
-  $('btnSubmit').onclick=submitEdit; $('btnCancel').onclick=()=>openRead(f.id.value);
-  $('btnLocate').onclick=locateAndFill; $('btnMap').onclick=initMapModal; f.cr_photos.onchange = handleCRPhotos;
+
+  $('btnSubmit').onclick=submitEdit;
+  $('btnCancel').onclick=()=>openRead(f.id.value);
+  $('btnLocate').onclick=locateAndFill;
+  $('btnMap').onclick=initMapModal;
+  f.cr_photos.onchange = handleCRPhotos;
 }
 
 // Géoloc + reverse geocoding (Nominatim)
@@ -533,8 +606,11 @@ async function locateAndFill(){
       const data = await r.json(); const a = data.address||{};
       const commune = a.city||a.town||a.village||a.municipality||''; const cp = a.postcode||'';
       const addr = [a.house_number,a.road,a.suburb,a.hamlet].filter(Boolean).join(' ');
-      f.lat.value = String(lat.toFixed(6)); f.lon.value = String(lon.toFixed(6));
-      f.adresse.value = addr || (data.display_name||''); f.cp.value = cp; f.commune.value = commune;
+      f.lat.value = String(lat.toFixed(6));
+      f.lon.value = String(lon.toFixed(6));
+      f.adresse.value = addr || (data.display_name||'');
+      f.cp.value = cp;
+      f.commune.value = commune;
       toast('Adresse auto-remplie via géoloc');
     }catch(e){ toast('Reverse geocoding indisponible'); }
   }, ()=>toast('Géoloc refusée'));
@@ -544,7 +620,10 @@ async function locateAndFill(){
 let map, marker;
 const mapWrap = $('mapWrap');
 $('mapClose').onclick=()=>mapWrap.style.display='none';
-$('mapLocate').onclick=()=>navigator.geolocation?.getCurrentPosition(p=>{ map.setView([p.coords.latitude,p.coords.longitude], 17); marker.setLatLng([p.coords.latitude,p.coords.longitude]); }, ()=>toast('Géoloc refusée'));
+$('mapLocate').onclick=()=>navigator.geolocation?.getCurrentPosition(p=>{
+  map.setView([p.coords.latitude,p.coords.longitude], 17);
+  marker.setLatLng([p.coords.latitude,p.coords.longitude]);
+}, ()=>toast('Géoloc refusée'));
 $('mapUse').onclick=async ()=>{
   const ll = marker.getLatLng();
   try{
@@ -552,9 +631,13 @@ $('mapUse').onclick=async ()=>{
     const data = await res.json(); const a=data.address||{};
     const commune=a.city||a.town||a.village||a.municipality||''; const cp=a.postcode||'';
     const addr=[a.house_number,a.road,a.suburb,a.hamlet].filter(Boolean).join(' ');
-    f.lat.value = String(ll.lat.toFixed(6)); f.lon.value = String(ll.lng.toFixed(6));
-    f.adresse.value = addr || (data.display_name||''); f.cp.value = cp; f.commune.value = commune;
-    mapWrap.style.display='none'; toast('Adresse renseignée depuis la carte');
+    f.lat.value = String(ll.lat.toFixed(6));
+    f.lon.value = String(ll.lng.toFixed(6));
+    f.adresse.value = addr || (data.display_name||'');
+    f.cp.value = cp;
+    f.commune.value = commune;
+    mapWrap.style.display='none';
+    toast('Adresse renseignée depuis la carte');
   }catch(e){ toast('Reverse geocoding indisponible'); }
 };
 function initMapModal(){
@@ -568,8 +651,14 @@ function initMapModal(){
       map.on('click', (e)=> marker.setLatLng(e.latlng));
     }
     const lat=parseFloat(f.lat.value), lon=parseFloat(f.lon.value);
-    if(!isNaN(lat) && !isNaN(lon)){ map.setView([lat,lon], 17); marker.setLatLng([lat,lon]); }
-    else if(navigator.geolocation){ navigator.geolocation.getCurrentPosition(p=>{ map.setView([p.coords.latitude,p.coords.longitude], 17); marker.setLatLng([p.coords.latitude,p.coords.longitude]); }); }
+    if(!isNaN(lat) && !isNaN(lon)){
+      map.setView([lat,lon], 17); marker.setLatLng([lat,lon]);
+    } else if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(p=>{
+        map.setView([p.coords.latitude,p.coords.longitude], 17);
+        marker.setLatLng([p.coords.latitude,p.coords.longitude]);
+      });
+    }
     setTimeout(()=>map.invalidateSize(),120);
   },50);
 }
@@ -577,7 +666,11 @@ function initMapModal(){
 // Photos CR
 function handleCRPhotos(ev){
   const files = Array.from(ev.target.files||[]).slice(0,8);
-  const readers = files.map(f=> new Promise(res=>{ const r=new FileReader(); r.onload=e=>res(e.target.result); r.readAsDataURL(f); }));
+  const readers = files.map(f=> new Promise(res=>{
+    const r=new FileReader();
+    r.onload=e=>res(e.target.result);
+    r.readAsDataURL(f);
+  }));
   Promise.all(readers).then(list=>{
     const cur = getCurrentPhotos();
     const all = cur.concat(list).slice(0,8);
@@ -597,6 +690,7 @@ function promotePipeline(p){
     if(order(seq,p.pipeline) < order(seq,atLeast)) p.pipeline = atLeast;
   }
 }
+
 function submitEdit(){
   const photos = getCurrentPhotos();
   const p = {
@@ -607,6 +701,7 @@ function submitEdit(){
     lat: f.lat.value||'', lon: f.lon.value||'',
     canal: f.canal.value, pipeline: f.pipeline.value,
     relance_date: f.relance_date.value||'', relance_statut: f.relance_statut.value,
+    acc_projet: f.acc_projet?.value.trim() || '',
     acc_type: f.acc_type?.value||'', acc_logts: f.acc_logts?.value||'',
     acc_conso: f.acc_conso?.value||'', acc_toit: f.acc_toit?.value||'',
     acc_contact: f.acc_contact?.value?.trim()||'', acc_pmo: f.acc_pmo?.value||'',
@@ -620,9 +715,9 @@ function submitEdit(){
   const idx = DB.findIndex(x=>x.id===p.id);
   if(idx>=0) DB[idx]=p; else DB.push(p);
   save();
-  // sync cloud
-  syncUpsertToCloud(p);
-  renderList(); toast(editIsNew?'Prospect ajouté':'Prospect mis à jour'); openRead(p.id);
+  renderList();
+  toast(editIsNew?'Prospect ajouté':'Prospect mis à jour');
+  openRead(p.id);
 }
 $('btnSubmit').onclick=submitEdit;
 
@@ -636,12 +731,15 @@ $('fileInput').onchange=(e)=>{
       importCSV(ev.target.result);
     }else{
       const data = new Uint8Array(ev.target.result);
-      const wb = XLSX.read(data,{type:'array'}); const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws); importRows(rows);
+      const wb = XLSX.read(data,{type:'array'});
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws);
+      importRows(rows);
     }
   };
   if(f.name.toLowerCase().endsWith('.csv')) reader.readAsText(f); else reader.readAsArrayBuffer(f);
 };
+
 function importCSV(text){
   const lines = text.split(/\r?\n/).filter(x=>x.trim().length);
   const hdr = lines[0].split(',').map(x=>x.trim().replace(/^"|"$/g,''));
@@ -651,6 +749,7 @@ function importCSV(text){
   });
   importRows(rows);
 }
+
 function norm(o){
   return {
     id: o['Prospect_ID']||o['Prospect ID']||o['id']||o['ID']||genId(),
@@ -669,6 +768,7 @@ function norm(o){
     pipeline: o['Pipeline']||o['pipeline']||'Nouveau',
     relance_date: o['Relance_Date']||o['Relance date']||o['relance_date']||'',
     relance_statut: o['Relance_Statut']||o['Relance statut']||o['relance_statut']||'À faire',
+    acc_projet: o['ACC_Projet']||o['ACC Projet']||o['acc_projet']||'',
     acc_type: o['ACC_Type']||o['ACC Type']||o['acc_type']||'',
     acc_logts: o['ACC_Logts']||o['acc_logts']||'',
     acc_conso: o['ACC_Conso_MWh']||o['ACC Conso MWh']||o['acc_conso']||'',
@@ -690,6 +790,7 @@ function norm(o){
     cr_photos: []
   };
 }
+
 function importRows(rows){
   let added=0, updated=0;
   rows.forEach(r=>{
@@ -697,32 +798,128 @@ function importRows(rows){
     const i = DB.findIndex(x=>x.id===p.id);
     if(i>=0){ DB[i] = Object.assign(DB[i], p); updated++; } else { DB.push(p); added++; }
   });
-  save(); renderList(); toast(`Import: +${added} ajout(s), ${updated} maj`);
+  save();
+  renderList();
+  toast(`Import: +${added} ajout(s), ${updated} maj`);
 }
-$('btnExport').onclick=()=>{
-  if(!DB.length){ toast('Aucune donnée'); return; }
-  const H = ["Prospect_ID","Date_fiche","Segment","Marche","Nom","Telephone","Email","Adresse","CP","Commune","Lat","Lon","Canal","Pipeline","Relance_Date","Relance_Statut",
-             "ACC_Type","ACC_Logts","ACC_Conso_MWh","ACC_Toit_m2","ACC_Contact","ACC_PMO",
-             "R2_Toiture","R2_Reseau","R2_PDL","R2_ECS","R2_VE_Modele","R2_VE_Km_an","R2_VE_Recharges_sem",
-             "CR_Date","CR_Duree_min","CR_Next","CR_Commentaires","Notes"];
-  const rows = DB.map(p=>[
-    p.id,p.date,p.segment,p.marche,p.nom,p.tel,p.email,p.adresse,p.cp,p.commune,p.lat,p.lon,p.canal,p.pipeline,p.relance_date,p.relance_statut,
-    p.acc_type||'',p.acc_logts||'',p.acc_conso||'',p.acc_toit||'',p.acc_contact||'',p.acc_pmo||'',
-    p.r2_toiture||'',p.r2_reseau||'',p.r2_pdl||'',p.r2_ecs||'',p.r2_ve_modele||'',p.r2_ve_km||'',p.r2_ve_recharges||'',
-    p.cr_date||'',p.cr_duree||'',p.cr_next||'',p.cr_notes||'',p.notes||''
-  ]);
-  const ws = XLSX.utils.aoa_to_sheet([H,...rows]); const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Prospects');
-  const out = XLSX.write(wb,{bookType:'xlsx',type:'array'});
-  const blob = new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-  const file = new File([blob], `Prospection_PV-${tsName()}.xlsx`, {type:blob.type});
-  if(navigator.canShare && navigator.canShare({files:[file]})){
-    navigator.share({files:[file], title:'Export Prospection PV', text:'Echome Prospects'});
-  }else{
-    const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=file.name; a.click(); URL.revokeObjectURL(url);
+
+// Export : XLSX si possible, sinon CSV
+$('btnExport').onclick = () => {
+  if (!DB.length) {
+    toast('Aucune donnée à exporter');
+    return;
+  }
+
+  try {
+    if (typeof XLSX !== 'undefined') {
+      const H = [
+        "Prospect_ID","Date_fiche","Segment","Marche","Nom","Telephone","Email","Adresse","CP","Commune",
+        "Lat","Lon","Canal","Pipeline","Relance_Date","Relance_Statut",
+        "ACC_Projet","ACC_Type","ACC_Logts","ACC_Conso_MWh","ACC_Toit_m2","ACC_Contact","ACC_PMO",
+        "R2_Toiture","R2_Reseau","R2_PDL","R2_ECS","R2_VE_Modele","R2_VE_Km_an","R2_VE_Recharges_sem",
+        "CR_Date","CR_Duree_min","CR_Next","CR_Commentaires","Notes"
+      ];
+
+      const rows = DB.map(p => [
+        p.id, p.date, p.segment, p.marche, p.nom, p.tel, p.email,
+        p.adresse, p.cp, p.commune, p.lat, p.lon, p.canal, p.pipeline,
+        p.relance_date, p.relance_statut,
+        p.acc_projet || '', p.acc_type || '', p.acc_logts || '', p.acc_conso || '', p.acc_toit || '',
+        p.acc_contact || '', p.acc_pmo || '',
+        p.r2_toiture || '', p.r2_reseau || '', p.r2_pdl || '', p.r2_ecs || '',
+        p.r2_ve_modele || '', p.r2_ve_km || '', p.r2_ve_recharges || '',
+        p.cr_date || '', p.cr_duree || '', p.cr_next || '', p.cr_notes || '', p.notes || ''
+      ]);
+
+      const ws = XLSX.utils.aoa_to_sheet([H, ...rows]);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Prospects');
+
+      const out = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([out], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      });
+      const fileName = `Prospection_PV-${tsName()}.xlsx`;
+
+      if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName)] })) {
+        const file = new File([blob], fileName, { type: blob.type });
+        navigator.share({ files: [file], title: 'Export Prospection PV', text: 'Echome Prospects' });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      toast('Export XLSX généré');
+      return;
+    }
+
+    console.warn('XLSX non chargé, fallback CSV');
+    exportCsvFallback();
+
+  } catch (e) {
+    console.error('Erreur export', e);
+    toast('Erreur export (voir console)');
   }
 };
-function tsName(){const d=new Date();const pad=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`;}
+
+function exportCsvFallback() {
+  if (!DB.length) {
+    toast('Aucune donnée à exporter');
+    return;
+  }
+
+  const H = [
+    "Prospect_ID","Date_fiche","Segment","Marche","Nom","Telephone","Email","Adresse","CP","Commune",
+    "Lat","Lon","Canal","Pipeline","Relance_Date","Relance_Statut",
+    "ACC_Projet","ACC_Type","ACC_Logts","ACC_Conso_MWh","ACC_Toit_m2","ACC_Contact","ACC_PMO",
+    "R2_Toiture","R2_Reseau","R2_PDL","R2_ECS","R2_VE_Modele","R2_VE_Km_an","R2_VE_Recharges_sem",
+    "CR_Date","CR_Duree_min","CR_Next","CR_Commentaires","Notes"
+  ];
+
+  const rows = DB.map(p => [
+    p.id || '', p.date || '', p.segment || '', p.marche || '',
+    (p.nom || '').replace(/"/g,'""'),
+    p.tel || '', p.email || '',
+    (p.adresse || '').replace(/"/g,'""'),
+    p.cp || '', (p.commune || '').replace(/"/g,'""'),
+    p.lat || '', p.lon || '', p.canal || '', p.pipeline || '',
+    p.relance_date || '', p.relance_statut || '',
+    (p.acc_projet || '').replace(/"/g,'""'), p.acc_type || '', p.acc_logts || '', p.acc_conso || '',
+    p.acc_toit || '', (p.acc_contact || '').replace(/"/g,'""'), p.acc_pmo || '',
+    p.r2_toiture || '', p.r2_reseau || '', p.r2_pdl || '', p.r2_ecs || '',
+    (p.r2_ve_modele || '').replace(/"/g,'""'), p.r2_ve_km || '', (p.r2_ve_recharges || '').replace(/"/g,'""'),
+    p.cr_date || '', p.cr_duree || '', p.cr_next || '',
+    (p.cr_notes || '').replace(/"/g,'""'),
+    (p.notes || '').replace(/"/g,'""')
+  ]);
+
+  const csvLines = [
+    H.join(';'),
+    ...rows.map(r => r.map(v => `"${v}"`).join(';'))
+  ];
+  const blob = new Blob([csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Prospection_PV-${tsName()}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Export CSV généré');
+}
+
+function tsName(){
+  const d=new Date();
+  const pad=n=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`;
+}
 
 // Init
 document.addEventListener('DOMContentLoaded',()=>{ renderList(); });
